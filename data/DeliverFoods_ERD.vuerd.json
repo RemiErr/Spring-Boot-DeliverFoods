@@ -1,0 +1,773 @@
+{
+  "canvas": {
+    "version": "2.2.11",
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": -51,
+    "scrollLeft": -29,
+    "zoomLevel": 1,
+    "show": {
+      "tableComment": true,
+      "columnComment": true,
+      "columnDataType": true,
+      "columnDefault": false,
+      "columnAutoIncrement": false,
+      "columnPrimaryKey": true,
+      "columnUnique": false,
+      "columnNotNull": false,
+      "relationship": true
+    },
+    "database": "MySQL",
+    "databaseName": "DeliverFoods",
+    "canvasType": "ERD",
+    "language": "GraphQL",
+    "tableCase": "pascalCase",
+    "columnCase": "camelCase",
+    "highlightTheme": "VS2015",
+    "bracketType": "none",
+    "setting": {
+      "relationshipDataTypeSync": true,
+      "relationshipOptimization": false,
+      "columnOrder": [
+        "columnName",
+        "columnDataType",
+        "columnNotNull",
+        "columnUnique",
+        "columnAutoIncrement",
+        "columnDefault",
+        "columnComment"
+      ]
+    },
+    "pluginSerializationMap": {}
+  },
+  "table": {
+    "tables": [
+      {
+        "id": "fec1c00c-dc8d-40a3-8800-ccc4e6fd3d9b",
+        "name": "users",
+        "comment": "使用者",
+        "columns": [
+          {
+            "id": "a1260933-51d8-44f5-9067-c8f8efe9eb7c",
+            "name": "user_id",
+            "comment": "用戶ID",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": true,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "419c377b-5215-418c-bab8-46e447b47b3e",
+            "name": "user_name",
+            "comment": "用戶名",
+            "dataType": "VARCHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 68.21875,
+              "widthComment": 60,
+              "widthDataType": 62.98828125,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "cfe583d7-2ec5-48d8-b42f-9936f10555f4",
+            "name": "email",
+            "comment": "電子信箱",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "a9b81362-7e3a-4622-9962-55f6e3f03dd4",
+            "name": "password",
+            "comment": "密碼",
+            "dataType": "VARCHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60.13818359375,
+              "widthComment": 60,
+              "widthDataType": 62.98828125,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "e979ceed-998f-4d8c-937a-e377994f96d8",
+            "name": "address",
+            "comment": "地址",
+            "dataType": "VARCHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 62.98828125,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "7a40c66b-a53a-4ce5-97a3-3412f3591ed9",
+            "name": "phone",
+            "comment": "電話",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          }
+        ],
+        "ui": {
+          "active": false,
+          "left": 161.6004,
+          "top": 150.2001,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60
+        },
+        "visible": true
+      },
+      {
+        "id": "91f723e7-ebda-44bc-b2b7-3ad213cf7933",
+        "name": "delivers",
+        "comment": "送貨員",
+        "columns": [
+          {
+            "id": "d87a25f3-1390-4655-ac74-0b4d6ae40a96",
+            "name": "deliver_id",
+            "comment": "送貨員ID",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": true,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60.4873046875,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "4e6ebf5a-21ec-4911-863e-d77d4f2a39a2",
+            "name": "trans_type",
+            "comment": "車種",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 65.3369140625,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "30a35216-47a1-4f7a-9f4c-38f9ad8c20df",
+            "name": "license",
+            "comment": "車牌號碼",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "83ea8e78-ae79-4d62-aecc-23bc1ff7c55c",
+            "name": "user_id",
+            "comment": "",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          }
+        ],
+        "ui": {
+          "active": false,
+          "left": 164.0889,
+          "top": 561.8903,
+          "zIndex": 6,
+          "widthName": 60,
+          "widthComment": 60
+        },
+        "visible": true
+      },
+      {
+        "id": "5d6ec17e-0786-4bb8-a417-e2be71798e39",
+        "name": "orders",
+        "comment": "訂單",
+        "columns": [
+          {
+            "id": "97a5a434-2042-47c2-8d4c-af5499b030aa",
+            "name": "order_id",
+            "comment": "訂單編號",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": true,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "a6cc5ca8-4327-4a08-bb5d-05637912f4e5",
+            "name": "state",
+            "comment": "訂單狀態",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "af2e492b-f5a5-458d-b788-41d358bd90da",
+            "name": "user_id",
+            "comment": "",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "956d7d65-69bd-49e1-acae-9348690bbf24",
+            "name": "deliver_id",
+            "comment": "",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 60.4873046875,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          }
+        ],
+        "ui": {
+          "active": false,
+          "left": 547.8886,
+          "top": 344.4441,
+          "zIndex": 7,
+          "widthName": 60,
+          "widthComment": 60
+        },
+        "visible": true
+      },
+      {
+        "id": "bb123846-aeae-4c3d-97d7-50927b16fec1",
+        "name": "order_items",
+        "comment": "品項",
+        "columns": [
+          {
+            "id": "c0541b7f-e278-4b18-a444-e02b3b717aec",
+            "name": "quantity",
+            "comment": "數量",
+            "dataType": "INT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "13651b6c-4322-4bfa-be91-e3fbc285574f",
+            "name": "order_id",
+            "comment": "",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": true,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "9d5e16b2-9582-4181-8bc1-72dc6aaaf34c",
+            "name": "food_id",
+            "comment": "",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": true,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          }
+        ],
+        "ui": {
+          "active": false,
+          "left": 907.6445,
+          "top": 243.8651,
+          "zIndex": 20,
+          "widthName": 74.35693359375,
+          "widthComment": 60
+        },
+        "visible": true
+      },
+      {
+        "id": "0805de9a-2b64-4c0b-adfa-1f517394e7a7",
+        "name": "foods",
+        "comment": "食物",
+        "columns": [
+          {
+            "id": "2c0acc6e-bacb-4272-aefb-31b7c8b827c2",
+            "name": "food_id",
+            "comment": "餐點ID",
+            "dataType": "BIGINT",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": true,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": true,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "bccc2695-abf3-484f-b1ba-42227456c923",
+            "name": "food_name",
+            "comment": "餐點名稱",
+            "dataType": "VARCHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 71.189453125,
+              "widthComment": 60,
+              "widthDataType": 62.98828125,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "5a3b9bbe-004d-478e-a899-9883de8de1a9",
+            "name": "food_type",
+            "comment": "種類",
+            "dataType": "CHAR",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 63.80078125,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "bbfa8f0d-dd9e-443c-a99e-b09687e90c6f",
+            "name": "price",
+            "comment": "價格",
+            "dataType": "DOUBLE",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            }
+          },
+          {
+            "id": "05cb3a50-acea-4cc5-9e67-03334128f1e4",
+            "name": "stock",
+            "comment": "庫存",
+            "dataType": "INsadfasdfsadfTL",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 106.86962890625,
+              "widthDefault": 60
+            }
+          }
+        ],
+        "ui": {
+          "active": true,
+          "left": 1143.0657,
+          "top": 518.1985,
+          "zIndex": 22,
+          "widthName": 60,
+          "widthComment": 60
+        },
+        "visible": true
+      }
+    ],
+    "indexes": []
+  },
+  "memo": {
+    "memos": []
+  },
+  "relationship": {
+    "relationships": [
+      {
+        "id": "8de979bd-11a3-416b-862f-0f68149d0740",
+        "identification": false,
+        "relationshipType": "ZeroOne",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "fec1c00c-dc8d-40a3-8800-ccc4e6fd3d9b",
+          "columnIds": [
+            "a1260933-51d8-44f5-9067-c8f8efe9eb7c"
+          ],
+          "x": 288.70391562500004,
+          "y": 342.2001,
+          "direction": "bottom"
+        },
+        "end": {
+          "tableId": "91f723e7-ebda-44bc-b2b7-3ad213cf7933",
+          "columnIds": [
+            "83ea8e78-ae79-4d62-aecc-23bc1ff7c55c"
+          ],
+          "x": 288.25735703124997,
+          "y": 561.8903,
+          "direction": "top"
+        },
+        "constraintName": "fk_users_to_deliver",
+        "visible": true
+      },
+      {
+        "id": "19723277-48f1-47b1-90a4-3fddd97185ea",
+        "identification": false,
+        "relationshipType": "ZeroN",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "fec1c00c-dc8d-40a3-8800-ccc4e6fd3d9b",
+          "columnIds": [
+            "a1260933-51d8-44f5-9067-c8f8efe9eb7c"
+          ],
+          "x": 415.80743125000004,
+          "y": 246.2001,
+          "direction": "right"
+        },
+        "end": {
+          "tableId": "5d6ec17e-0786-4bb8-a417-e2be71798e39",
+          "columnIds": [
+            "af2e492b-f5a5-458d-b788-41d358bd90da"
+          ],
+          "x": 547.8886,
+          "y": 382.1941,
+          "direction": "left"
+        },
+        "constraintName": "fk_users_to_orders",
+        "visible": true
+      },
+      {
+        "id": "028ad1a1-ae8c-4b63-a32c-ceecdecf5b4f",
+        "identification": true,
+        "relationshipType": "OneN",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "5d6ec17e-0786-4bb8-a417-e2be71798e39",
+          "columnIds": [
+            "97a5a434-2042-47c2-8d4c-af5499b030aa"
+          ],
+          "x": 791.3759046875,
+          "y": 419.9441,
+          "direction": "right"
+        },
+        "end": {
+          "tableId": "bb123846-aeae-4c3d-97d7-50927b16fec1",
+          "columnIds": [
+            "13651b6c-4322-4bfa-be91-e3fbc285574f"
+          ],
+          "x": 907.6445,
+          "y": 309.1151,
+          "direction": "left"
+        },
+        "constraintName": "fk_orders_to_order_items",
+        "visible": true
+      },
+      {
+        "id": "1ec3cd84-b699-4e62-a7b9-3ca2af433215",
+        "identification": true,
+        "relationshipType": "OneN",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "0805de9a-2b64-4c0b-adfa-1f517394e7a7",
+          "columnIds": [
+            "2c0acc6e-bacb-4272-aefb-31b7c8b827c2"
+          ],
+          "x": 1293.595241015625,
+          "y": 518.1985,
+          "direction": "top"
+        },
+        "end": {
+          "tableId": "bb123846-aeae-4c3d-97d7-50927b16fec1",
+          "columnIds": [
+            "9d5e16b2-9582-4181-8bc1-72dc6aaaf34c"
+          ],
+          "x": 1150.6444999999999,
+          "y": 309.1151,
+          "direction": "right"
+        },
+        "constraintName": "fk_foods_to_order_items",
+        "visible": true
+      },
+      {
+        "id": "ef34c9d8-1f36-4b1e-8c41-1c6ea1d7f911",
+        "identification": false,
+        "relationshipType": "ZeroN",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "91f723e7-ebda-44bc-b2b7-3ad213cf7933",
+          "columnIds": [
+            "d87a25f3-1390-4655-ac74-0b4d6ae40a96",
+            "83ea8e78-ae79-4d62-aecc-23bc1ff7c55c"
+          ],
+          "x": 412.42581406249997,
+          "y": 637.3903,
+          "direction": "right"
+        },
+        "end": {
+          "tableId": "5d6ec17e-0786-4bb8-a417-e2be71798e39",
+          "columnIds": [
+            "956d7d65-69bd-49e1-acae-9348690bbf24",
+            "18e4283d-a4d8-4638-9b2e-6d137e4d1b13"
+          ],
+          "x": 547.8886,
+          "y": 457.6941,
+          "direction": "left"
+        },
+        "constraintName": "fk_delivers_to_orders",
+        "visible": true
+      }
+    ]
+  }
+}

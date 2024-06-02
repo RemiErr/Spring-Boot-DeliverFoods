@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/api/auth/login" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="name">
+        <!-- #坑
+            後端 User Model 變數名為 "user_name"，
+            前端傳回時，Spring Boot 會理解成「user 的 name」，
+            並重新 map 成相對應的物件 (User)
+         -->
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <button type="submit">Login</button>
+    </form>
+    <div th:if="${param.error}">
+        <p>Invalid username or password.</p>
+    </div>
+</body>
+</html>
+
