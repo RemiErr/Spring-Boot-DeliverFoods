@@ -49,16 +49,14 @@ public class ItemService implements IService<OrderItem> {
 
   @Override
   public void save(OrderItem item) {
-    jdbcTemplate.update(
-        "INSERT INTO order_items(quantity, order_id, food_id) VALUES(?, ?, ?)",
-        item.getQuantity(), item.getOrderId(), item.getFoodId());
+    String sql = "INSERT INTO order_items(quantity, order_id, food_id) VALUES(?, ?, ?)";
+    jdbcTemplate.update(sql, item.getQuantity(), item.getOrderId(), item.getFoodId());
   }
 
   @Override
   public void update(OrderItem item) {
-    jdbcTemplate.update(
-        "UPDATE order_items SET quantity=? WHERE order_id=? AND food_id=?",
-        item.getQuantity(), item.getOrderId(), item.getFoodId());
+    String sql = "UPDATE order_items SET quantity=? WHERE order_id=? AND food_id=?";
+    jdbcTemplate.update(sql, item.getQuantity(), item.getOrderId(), item.getFoodId());
   }
 
   @Override

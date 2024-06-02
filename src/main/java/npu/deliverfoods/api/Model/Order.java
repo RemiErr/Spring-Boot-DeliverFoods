@@ -48,9 +48,9 @@ public class Order {
         this.order_id = keys.get(1);
     }
 
-    public void setForeignKeys(Long uid, Long oid) {
+    public void setForeignKeys(Long uid, Long did) {
         this.user_id = uid;
-        this.order_id = oid;
+        this.deliver_id = did;
     }
 
     public Long getFkUserId() {

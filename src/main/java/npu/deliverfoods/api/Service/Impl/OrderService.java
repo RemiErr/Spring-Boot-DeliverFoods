@@ -15,9 +15,6 @@ import npu.deliverfoods.api.Service.IService;
 @Service
 public class OrderService implements IService<Order> {
 
-    // 等待中、外送中、已送達
-    static final String[] orderState = { "waiting", "delivering", "arrived" };
-
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -45,7 +42,7 @@ public class OrderService implements IService<Order> {
     @Override
     public void save(Order order) {
         jdbcTemplate.update(
-                "INSERT INTO orders(order_id, stat, user_id, deliver_id) VALUES(?, ?, ?, ?, ?)",
+                "INSERT INTO orders(order_id, state, user_id, deliver_id) VALUES(?, ?, ?, ?)",
                 order.getId(), order.getState(), order.getFkUserId(), order.getFkDeliverId());
     }
 
@@ -70,6 +67,20 @@ public class OrderService implements IService<Order> {
         for (Order order : orders) {
             this.save(order);
         }
+    }
+
+    @SuppressWarnings("null")
+    public Long getOrderLatestId() {
+        String sql = "SELECT TOP 1 order_id FROM orders ORDER BY order_id DESC";
+        Long latesId = 1L;
+
+        try {
+            latesId += jdbcTemplate.queryForObject(sql, Long.class);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        return latesId;
     }
 
 }
