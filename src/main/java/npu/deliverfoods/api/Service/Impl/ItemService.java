@@ -114,7 +114,7 @@ public class ItemService implements IService<OrderItem> {
 
   // #BUG: 執行刪除 SQL 時會回傳 NullPointer Error
   public void deleteByObject(OrderItem orderItem) {
-    String sql = "DELETE FROM AAA WHERE fid=? AND oid=?";
+    String sql = "DELETE FROM order_items WHERE food_id=? AND order_id=?";
     
     int count = jdbcTemplate.update(sql, orderItem.getFoodId(), orderItem.getOrderId());
     
