@@ -1,5 +1,8 @@
 package npu.deliverfoods.api.Service.Impl;
 
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -61,7 +64,6 @@ public class ItemService implements IService<OrderItem> {
 
   @Override
   public void deleteById(long id) {
-    jdbcTemplate.update("DELETE * FROM order_items WHERE order_id=?", id);
     String error = "※ 請使用 deleteByForignId()";
     System.err.println(error);
 
@@ -73,7 +75,7 @@ public class ItemService implements IService<OrderItem> {
   }
 
   public OrderItem findByFkFoodId(Long foodId) {
-    String sql = "SELETE * FROM order_items WHERE food_id=?";
+    String sql = "SELECT * FROM order_items WHERE food_id=?";
     OrderItem founOrderItem = null;
 
     try {
@@ -86,7 +88,7 @@ public class ItemService implements IService<OrderItem> {
   }
 
   public OrderItem findByFkOrderId(Long orderId) {
-    String sql = "SELETE * FROM order_items WHERE order_id=?";
+    String sql = "SELECT * FROM order_items WHERE order_id=?";
     OrderItem founOrderItem = null;
 
     try {
@@ -99,7 +101,7 @@ public class ItemService implements IService<OrderItem> {
   }
 
   public OrderItem findByForignId(Long foodId, Long orderId) {
-    String sql = "SELETE * FROM order_items WHERE food_id=? AND order_id=?";
+    String sql = "SELECT * FROM order_items WHERE food_id=? AND order_id=?";
     OrderItem founOrderItem = null;
 
     try {
@@ -110,14 +112,16 @@ public class ItemService implements IService<OrderItem> {
     return founOrderItem;
   }
 
-  public void deleteByForignId(Long foodId, Long orderId) {
-    String sql = "DELETE * FROM order_items WHERE food_id=? AND order_id=?";
-
-    try {
-      jdbcTemplate.update(sql, foodId, orderId);
-      System.out.println("訂單刪除成功");
-    } catch (Exception e) {
-      e.getStackTrace();
+  // #BUG: 執行刪除 SQL 時會回傳 NullPointer Error
+  public void deleteByObject(OrderItem orderItem) {
+    String sql = "DELETE FROM AAA WHERE fid=? AND oid=?";
+    
+    int count = jdbcTemplate.update(sql, orderItem.getFoodId(), orderItem.getOrderId());
+    
+    if (count > 0) {
+      System.out.println("已刪除 " + count + " 筆資料");
+    } else {
+      System.out.println("未找到該資料");
     }
   }
 
