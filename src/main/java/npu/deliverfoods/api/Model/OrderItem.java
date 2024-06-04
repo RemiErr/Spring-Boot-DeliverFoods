@@ -3,12 +3,18 @@ package npu.deliverfoods.api.Model;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class OrderItem {
 
+    @JsonProperty("quantity")
     private int quantity;
-
+    
     // Foreign Keys
+    @JsonProperty("orderId")
     private Long order_id;
+
+    @JsonProperty("foodId")
     private Long food_id;
 
     public OrderItem() {

@@ -1,13 +1,20 @@
 package npu.deliverfoods.api.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Deliver {
 
+    @JsonProperty("deliverId")
     private Long deliver_id;
+
+    @JsonProperty("type")
     private String trans_type;
+
+    @JsonProperty("license")
     private String license;
 
     // Foreign Key
-    private Long user_id;
+    private Long userId;
 
     public Deliver() {
     }
@@ -44,11 +51,11 @@ public class Deliver {
     }
 
     public Long getFkUserId() {
-        return this.user_id;
+        return this.userId;
     }
 
     public void setFkUserId(Long uid) {
-        this.user_id = uid;
+        this.userId = uid;
     }
 
 }

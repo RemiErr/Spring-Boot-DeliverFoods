@@ -1,11 +1,22 @@
 package npu.deliverfoods.api.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Food {
 
+    @JsonProperty("foodId")
     private Long food_id;
+    
+    @JsonProperty("name")
     private String food_name;
+    
+    @JsonProperty("type")
     private String food_type;
+    
+    @JsonProperty("price")
     private double price;
+    
+    @JsonProperty("stock")
     private Long stock;
 
     public Food() {

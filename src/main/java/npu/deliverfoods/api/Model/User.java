@@ -1,13 +1,26 @@
 package npu.deliverfoods.api.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
 
     // Database Columns
+    @JsonProperty("userId")
     private Long user_id;
+
+    @JsonProperty("name")
     private String user_name;
+
+    @JsonProperty("email")
     private String email;
+
+    @JsonProperty("phone")
     private String phone;
+
+    @JsonProperty("address")
     private String address;
+
+    @JsonProperty("password")
     private String password;
 
     public User() {
