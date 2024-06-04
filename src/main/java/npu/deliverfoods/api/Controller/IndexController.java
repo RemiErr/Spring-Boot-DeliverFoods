@@ -70,10 +70,15 @@ public class IndexController {
         return "index";
     }
 
-    // @GetMapping("/order/addition/")
-    // public void addItemToOrder(HttpServletRequest request, Model model,
-    //         @RequestParam Map<String, String> allParams) {
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
 
-        
-    // }
+        model.addAttribute("orders", orderService.findAll());
+
+        return "dashboard";
+    }
+
 }

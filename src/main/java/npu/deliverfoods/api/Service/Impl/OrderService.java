@@ -31,7 +31,44 @@ public class OrderService implements IService<Order> {
 
     @Override
     public List<Order> findAll() {
-        return jdbcTemplate.query("SELECT * FROM orders", new OrderRowMapper());
+        String sql = "SELECT * FROM orders";
+        List<Order> allOrder = null;
+
+        try {
+            allOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        return allOrder;
+    }
+
+    private List<Order> findAll(String sql) {
+        List<Order> allOrder = null;
+
+        try {
+            allOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        return allOrder;
+    }
+    
+    // 所有等待中的訂單
+    public List<Order> findAllWaitingOrder() {
+        String sql = "SELECT * FROM orders WHERE state=wairing";
+        return this.findAll(sql);
+    }
+    
+    // 所有外送中的訂單
+    public List<Order> findAllDeliveringOrder() {
+        String sql = "SELECT * FROM orders WHERE state=delivering";
+        return this.findAll(sql);
+    }
+    
+    // 所有已送達的訂單
+    public List<Order> findAllArrivedOrder() {
+        String sql = "SELECT * FROM orders WHERE state=arrived";
+        return this.findAll(sql);
     }
 
     @Override
@@ -49,8 +86,8 @@ public class OrderService implements IService<Order> {
     @Override
     public void update(Order order) {
         jdbcTemplate.update(
-                "UPDATE orders SET stat=?, user_id=?, deliver_id=? WHERE order_id=?",
-                order.getState(), order.getFkUserId(), order.getFkDeliverId());
+                "UPDATE orders SET state=?, user_id=?, deliver_id=? WHERE order_id=?",
+                order.getState(), order.getFkUserId(), order.getFkDeliverId(), order.getId());
     }
 
     @Override
@@ -59,7 +96,7 @@ public class OrderService implements IService<Order> {
     }
 
     public void updateOrderState(Long orderId) {
-        String sql = "UPDATE orders SET stat=? WHERE order_id=?";
+        String sql = "UPDATE orders SET state=? WHERE order_id=?";
         jdbcTemplate.update(sql, orderId);
     }
 

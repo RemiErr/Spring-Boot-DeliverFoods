@@ -11,6 +11,8 @@ import npu.deliverfoods.api.Model.Deliver;
 import npu.deliverfoods.api.Model.User;
 import npu.deliverfoods.api.Service.Impl.DeliverService;
 import npu.deliverfoods.api.Service.Impl.UserService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,11 +24,13 @@ public class AuthController {
   @Autowired
   private DeliverService deliverService;
 
+  HttpSession session;
+
   @PostMapping("/login")
-  public void login(User user, HttpServletRequest request, HttpServletResponse response)
+  public void login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
       throws IOException {
 
-    HttpSession session = request.getSession();
+    session = request.getSession();
     User foundUser = userService.findByUsername(user.getName());
     Deliver foundDeliver = null;
     boolean authorized = false;
@@ -39,11 +43,11 @@ public class AuthController {
 
     // 將參數一起重新導向至對應頁面
     if (authorized) {
-      
+
       session.setAttribute("loggedInUser", foundUser);
       session.setAttribute("loginMessage", user.getName() + " 登入成功");
       session.setAttribute("deliverId", null);
-      
+
       boolean isDeliver = foundDeliver != null;
       if (isDeliver) {
 
@@ -54,31 +58,40 @@ public class AuthController {
         response.sendRedirect("/?deliver=" + deliverId);
 
       }
-      
+
       response.sendRedirect("/");
     } else {
       session.setAttribute("loginMessage", user.getName() + " 登入失敗");
       response.sendRedirect("/login?error=true");
     }
-
-    // boolean authorized = userService.authorize(user.getName(), user.getPassword());
-    
-    // if (authorized) {
-    //   HttpSession session = request.getSession();
-    //   session.setAttribute("user", user);
-    //   session.setAttribute("loginMessage", user.getName() + " 成功登入");
-    //   response.sendRedirect("/");
-    // } else {
-    //   response.sendRedirect("/login?error=true");
-    // }
   }
 
   @PostMapping("/logout")
   public void logout(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    HttpSession session = request.getSession();
+    session = request.getSession();
     session.invalidate();
     response.sendRedirect("/login");
+  }
+
+  @PostMapping("/signup")
+  public boolean signUp(HttpServletRequest request, HttpServletResponse response,
+      @RequestBody User signUpUser) {
+
+    if (signUpUser.getName() == null ||
+        signUpUser.getName() == "" ||
+        signUpUser.getPassword() == null ||
+        signUpUser.getPassword() == "") {
+      
+      session = request.getSession();
+      session.setAttribute("signUpError", "帳號或密碼不能為空");
+      return false;
+    }
+
+    Long latesUserId = userService.getUserLatestId();
+    signUpUser.setId(latesUserId);
+    userService.save(signUpUser);
+    return true;
   }
 
 }

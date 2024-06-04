@@ -1,8 +1,5 @@
 package npu.deliverfoods.api.Service.Impl;
 
-import java.beans.Statement;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -112,17 +109,27 @@ public class ItemService implements IService<OrderItem> {
     return founOrderItem;
   }
 
-  // #BUG: 執行刪除 SQL 時會回傳 NullPointer Error
   public void deleteByObject(OrderItem orderItem) {
     String sql = "DELETE FROM order_items WHERE food_id=? AND order_id=?";
-    
-    int count = jdbcTemplate.update(sql, orderItem.getFoodId(), orderItem.getOrderId());
-    
-    if (count > 0) {
-      System.out.println("已刪除 " + count + " 筆資料");
-    } else {
-      System.out.println("未找到該資料");
+    OrderItem foundOrderItem = null;
+    // 確認有該資料
+    try {
+      foundOrderItem = this.findByForignId(orderItem.getFoodId(), orderItem.getOrderId());
+    } catch (Exception e) {
+      e.getStackTrace();
     }
+
+    if (foundOrderItem != null) {
+      try {
+        int count = jdbcTemplate.update(sql, orderItem.getFoodId(), orderItem.getOrderId());
+        System.out.println("已刪除 " + count + " 筆資料");
+      } catch (Exception e) {
+        e.getStackTrace();
+      }
+    } else {
+      System.out.println("未找到該筆資料，order_id: " + orderItem.getOrderId() + ", food_id: " + orderItem.getFoodId());
+    }
+
   }
 
   public void saveAll(List<OrderItem> items) {

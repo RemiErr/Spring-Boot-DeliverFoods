@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,9 @@ public class UserService implements IService<User> {
       user.setId(rs.getLong("user_id"));
       user.setName(rs.getString("user_name"));
       user.setPassword(rs.getString("password"));
+      user.setEmail(rs.getString("email"));
+      user.setAddress(rs.getString("address"));
+      user.setPhone(rs.getString("phone"));
       return user;
     }
   }
@@ -47,12 +49,6 @@ public class UserService implements IService<User> {
       System.err.println("[Wrong] 未找到該 User 資料： User Id:" + id);
     }
     return user;
-
-    // try {
-    // return Optional.ofNullable(user);
-    // } catch (Exception e) {
-    // return Optional.empty();
-    // }
   }
 
   @Override
@@ -75,10 +71,6 @@ public class UserService implements IService<User> {
   }
 
   // 可能找到同名用戶，所以回傳使用 List
-  // public List<User> findByUsername(String user_name) {
-  // String sql = "SELECT * FROM users WHERE user_name=?";
-  // return jdbcTemplate.query(sql, new UserRowMapper(), user_name);
-  // }
   public User findByUsername(String user_name) {
     String sql = "SELECT * FROM users WHERE user_name=?";
     User user = null;
@@ -91,13 +83,17 @@ public class UserService implements IService<User> {
     return user;
   }
 
-  // public boolean authorize(String user_name, String password) {
-  // List<User> users = findByUsername(user_name);
-  // for (User user : users) {
-  // if (user.getPassword().equals(password))
-  // return true;
-  // }
-  // return false;
-  // }
+  @SuppressWarnings("null")
+  public Long getUserLatestId() {
+    String sql = "SELECT TOP 1 user_id FROM users ORDER BY user_id DESC";
+    Long latesId = 1L;
 
+    try {
+      latesId += jdbcTemplate.queryForObject(sql, Long.class);
+    } catch (Exception e) {
+      e.getStackTrace();
+    }
+
+    return latesId;
+  }
 }
