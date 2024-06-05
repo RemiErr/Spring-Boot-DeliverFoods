@@ -2,13 +2,16 @@ package npu.deliverfoods.api.Service.Impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import npu.deliverfoods.api.Model.Order;
 import npu.deliverfoods.api.Model.OrderItem;
 import npu.deliverfoods.api.Service.IService;
 
@@ -137,5 +140,25 @@ public class ItemService implements IService<OrderItem> {
       this.save(item);
     }
   }
+  
+  public void updateAll(List<OrderItem> items) {
+    for (OrderItem item : items) {
+      this.update(item);
+    }
+  }
 
+  public boolean checkRelation(Long fid, Long oid) {
+    String sql = "SELECT * FROM foods, orders, order_items " + 
+                          "WHERE (order_items.food_id = foods.food_id) AND (order_items.order_id = orders.order_id) " + 
+                          "AND foods.food_id=? AND orders.order_id=?";
+    OrderItem foundOrderItem = null;
+    
+    try {
+      foundOrderItem = jdbcTemplate.queryForObject(sql, new OrderItemRowMapper(), fid, oid);
+    } catch (Exception e) {
+      e.getStackTrace();
+    }
+
+    return foundOrderItem != null;
+  }
 }

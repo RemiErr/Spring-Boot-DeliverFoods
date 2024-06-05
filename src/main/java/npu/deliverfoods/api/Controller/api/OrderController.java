@@ -1,5 +1,6 @@
 package npu.deliverfoods.api.Controller.api;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class OrderController {
   private HttpSession session;
 
   // 等待中、外送中、已送達
-  private enum eS {
+  public enum eS {
     等待中("waiting"),
     外送中("delivering"),
     已送達("arrived");
@@ -56,13 +57,13 @@ public class OrderController {
   // 建立訂單、關係 (Json)
   @PostMapping("/addition")
   public void addItemsToOrder(HttpServletRequest request,
-      @RequestBody Map<String, StructFood[]> foodsMap) {
+      @RequestBody Map<String, List<StructFood>> foodsMap) {
 
     // 取得新訂單 ID
     Long newOrderId = orderService.getOrderLatestId();
 
     // 所有品項
-    StructFood[] foods = foodsMap.get("foods");
+    List<StructFood> foods = foodsMap.get("foods");
 
     // 當前使用者
     session = request.getSession();
@@ -75,10 +76,6 @@ public class OrderController {
     } catch (Exception e) {
       e.getStackTrace();
     }
-
-    // 測試用
-    // loggedInUser = new User();
-    // loggedInUser.setId(1L);
 
     // 建立訂單資料
     Order newOrder = new Order();
@@ -108,28 +105,23 @@ public class OrderController {
     itemService.deleteByObject(orderItem);
   }
 
+  // 修改品項數量
   @PostMapping("/edit")
   public void editItemFromOrder(HttpServletRequest request,
-      @RequestParam(name = "orderId") Long orderId,
-      @RequestBody Map<String, StructFood[]> foodsMap) {
-      
-    StructFood[] foods = foodsMap.get("foods");
+      @RequestBody Map<String, List<OrderItem>> foodsMap) {
 
-    for (StructFood food : foods) {
-      OrderItem orderItem = new OrderItem();
-      orderItem.setQuantity(food.getQuantity());
-      orderItem.setForeignKeys(orderId, food.getFoodId());
-
-      itemService.update(orderItem);
-    }
-}
-
+    List<OrderItem> foods = foodsMap.get("foods");
+    itemService.updateAll(foods);
+  }
 
   // 接單
   @PostMapping("/pickup")
   public void pickOrder(@RequestBody Order order,
-      HttpServletRequest redirect,
+      HttpServletRequest request,
       @RequestParam(name = "deliverId") Long deliverId) {
+
+    // session = request.getSession();
+    // session.setAttribute("pickedDeliver", deliverService.findById(deliverId));
 
     // 更新資料
     order.setFkDeliverId(deliverId);

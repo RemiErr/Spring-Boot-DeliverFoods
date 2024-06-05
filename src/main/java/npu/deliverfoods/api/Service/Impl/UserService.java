@@ -46,7 +46,7 @@ public class UserService implements IService<User> {
     try {
       user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
     } catch (Exception e) {
-      System.err.println("[Wrong] 未找到該 User 資料： User Id:" + id);
+      System.out.println("[Wrong] 未找到該 User 資料： User Id:" + id);
     }
     return user;
   }
@@ -96,4 +96,12 @@ public class UserService implements IService<User> {
 
     return latesId;
   }
+
+  public String getNameByDeliverId(Long id) {
+    String sql = "SELECT user_name FROM users, orders " + 
+                 "WHERE (users.user_id = orders.user_id) " + 
+                 "AND deliver_id=?";
+    return jdbcTemplate.queryForObject(sql, String.class, id);
+  }
+
 }

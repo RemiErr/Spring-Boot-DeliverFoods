@@ -39,8 +39,12 @@ public class AuthController {
 
     // 先確認有該使用者，再驗證資料
     if (foundUser != null) {
-      deliverService.findByUserId(foundUser.getId());
+      foundDeliver = deliverService.findByUserId(foundUser.getId());
       authorized = foundUser.getPassword().equals(user.getPassword());
+    } else {
+      session.setAttribute("loginMessage", user.getName() + "不存在的帳號");
+      response.sendRedirect("/login");
+      return;
     }
 
     // 將參數一起重新導向至對應頁面
@@ -64,7 +68,7 @@ public class AuthController {
       response.sendRedirect("/");
     } else {
       session.setAttribute("loginMessage", user.getName() + " 登入失敗");
-      response.sendRedirect("/login?error=true");
+      response.sendRedirect("/login");
     }
   }
 
@@ -77,7 +81,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public boolean signUp(HttpServletRequest request, HttpServletResponse response,
+  public void signUp(HttpServletRequest request, HttpServletResponse response,
       @RequestBody User signUpUser) {
         
     session = request.getSession();
@@ -88,7 +92,7 @@ public class AuthController {
         signUpUser.getPassword() == "") {
       
       session.setAttribute("signUpErrorMessage", "帳號或密碼不能為空");
-      return false;
+      return;
     }
 
     // 檢查是否重複帳號
@@ -98,7 +102,7 @@ public class AuthController {
       if (user.getName().equals(signUpUserName)) {
         session.setAttribute("signUpErrorMessage", "帳號已存在");
         System.out.println("[Error] 已有存在的帳號 User-Name=" + user.getName());
-        return false;
+        return;
       }
     }
 
@@ -106,7 +110,6 @@ public class AuthController {
     Long latesUserId = userService.getLatesUsertId();
     signUpUser.setId(latesUserId);
     userService.save(signUpUser);
-    return true;
   }
 
   @PostMapping("/remove")

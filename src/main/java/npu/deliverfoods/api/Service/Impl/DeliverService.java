@@ -2,12 +2,9 @@ package npu.deliverfoods.api.Service.Impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -51,7 +48,7 @@ public class DeliverService implements IService<Deliver> {
     public Deliver findById(long id) {
         // return jdbcTemplate.queryForObject("SELECT * FROM delivers WHERE delivers_id=?",
         //         new DeliverRowMapper(), id);
-        String sql = "SELECT * FROM delivers WHERE delivers_id=?";
+        String sql = "SELECT * FROM delivers WHERE deliver_id=?";
         Deliver deliver = null;
 
         try {
@@ -82,20 +79,7 @@ public class DeliverService implements IService<Deliver> {
         jdbcTemplate.update("DELETE * FROM delivers WHERE deliver_id=?", id);
     }
 
-
-    private static final Map<Long, Deliver> delivers = new HashMap<>();
-
-    static {
-        // 模擬一些外送員數據
-        Deliver deliver1 = new Deliver();
-        deliver1.setId(1);
-        deliver1.setLicense("A12345");
-        deliver1.setFkUserId((long) 2);
-        delivers.put(deliver1.getFkUserId(), deliver1);
-    }
-
     public Deliver findByUserId(Long userId) {
-        // return delivers.get(userId);
         String sql = "SELECT * FROM delivers WHERE user_id=?";
         Deliver deliver = null;
         try {

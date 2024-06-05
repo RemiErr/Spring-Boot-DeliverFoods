@@ -10,11 +10,6 @@
     <form action="/api/auth/login" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="name">
-        <!-- #坑
-            後端 User Model 變數名為 "user_name"，
-            前端傳回時，Spring Boot 會理解成「user 的 name」，
-            並重新 map 成相對應的物件 (User)
-         -->
         <br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password">

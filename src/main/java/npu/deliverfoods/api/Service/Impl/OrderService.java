@@ -55,25 +55,41 @@ public class OrderService implements IService<Order> {
     
     // 所有等待中的訂單
     public List<Order> findAllWaitingOrder() {
-        String sql = "SELECT * FROM orders WHERE state=wairing";
+        String sql = "SELECT * FROM orders WHERE state='wairing'";
         return this.findAll(sql);
     }
     
     // 所有外送中的訂單
     public List<Order> findAllDeliveringOrder() {
-        String sql = "SELECT * FROM orders WHERE state=delivering";
+        String sql = "SELECT * FROM orders WHERE state='delivering'";
         return this.findAll(sql);
     }
     
     // 所有已送達的訂單
     public List<Order> findAllArrivedOrder() {
-        String sql = "SELECT * FROM orders WHERE state=arrived";
+        String sql = "SELECT * FROM orders WHERE state='arrived'";
         return this.findAll(sql);
     }
 
     @Override
     public Order findById(long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE user_id=?", new OrderRowMapper(), id);
+        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE order_id=?", new OrderRowMapper(), id);
+    }
+
+    public Order findByUserIdAndDeliverId(long uid, long did) {
+        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE user_id=? and deliver_id=?", new OrderRowMapper(), uid, did);
+    }
+
+    public List<Order> findByUserIdForList(long id) {
+        String sql = "SELECT * FROM orders WHERE user_id=" + id;
+        List<Order> allOrder = null;
+
+        try {
+            allOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        return allOrder;
     }
 
     @Override
@@ -108,7 +124,7 @@ public class OrderService implements IService<Order> {
 
     @SuppressWarnings("null")
     public Long getOrderLatestId() {
-        String sql = "SELECT TOP 1 order_id FROM orders ORDER BY order_id DESC";
+        String sql = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1";
         Long latesId = 1L;
 
         try {
@@ -118,6 +134,11 @@ public class OrderService implements IService<Order> {
         }
 
         return latesId;
+    }
+
+    public Long getDeliverIdByOrderId(Long oid) {
+        String sql = "SELECT deliver_id FROM orders WHERE order_id=?";
+        return jdbcTemplate.queryForObject(sql, Long.class, oid);
     }
 
 }

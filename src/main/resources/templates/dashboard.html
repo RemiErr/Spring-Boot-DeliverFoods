@@ -4,7 +4,16 @@
     <title>Error</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p>IS DELIVER</p>
+    <h1 th:text="${map.get('waiting').orderId}"></h1>
+    <table>
+        <tr>
+            <th>Food Name</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="item : ${map.get('waiting').items}">
+            <td th:text="${item.foodName}">ID</td>
+            <td th:text="${item.price}">Username</td>
+        </tr>
+    </table>
 </body>
 </html>
