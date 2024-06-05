@@ -104,7 +104,6 @@ public class IndexController {
         return "pick";
     }
 
-    // TODO: BUG 表單項被重複覆蓋
     // 使用者後台
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest request, Model model) {
@@ -127,7 +126,7 @@ public class IndexController {
         // 外送中清單
         model = getAllOrderDetail(model, orderService.findAllDeliveringOrder());
         // 已送達清單
-        // model = getAllOrderDetail(model, orderService.findAllArrivedOrder());
+        model = getAllOrderDetail(model, orderService.findAllArrivedOrder());
 
         return "dashboard";
     }
@@ -171,16 +170,17 @@ public class IndexController {
     // 要顯示訂單狀態、內含品項，打包成 Model
     public Model getAllOrderDetail(Model model, List<Order> allOrder) {
       // List<Order> allOrder = orderService.findAllWaitingOrder();
-      List<Food> allFood = foodService.findAll();
       List<ItemDeteil> itemDeteilList = new ArrayList<>();                  // 品項清單
       List<OrderDetail> orderDetailList = new ArrayList<>();                // 詳細資料
+      List<Food> allFood = foodService.findAll();
       // Map<String, List<OrderDetail>> orderDetailMap = new HashMap<>();      // 打包
 
+      // 防止空陣列
+      if (allOrder == null || allOrder.isEmpty()) {
+        return model;
+      }
       
       for (Order order : allOrder) {
-        OrderDetail orderDetail = new OrderDetail();
-        ItemDeteil itemDeteil = new ItemDeteil();
-
         Long foundDeliverId = 0L;
         Deliver foundDeliver = null;
 
@@ -195,7 +195,7 @@ public class IndexController {
         // 打包所有餐點品項資料
         for (Food food : allFood) {
           if (itemService.checkRelation(food.getId(), order.getId())) {             
-
+            ItemDeteil itemDeteil = new ItemDeteil();
             itemDeteil.setFoodId(food.getId());
             itemDeteil.setFoodName(food.getName());
             itemDeteil.setFoodType(food.getFoodType());
@@ -208,6 +208,7 @@ public class IndexController {
         }
 
         // 中間層
+        OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId(order.getId());
         if (foundDeliver != null) {
           orderDetail.setDeliverName(userService.getNameByDeliverId(foundDeliver.getId()));
