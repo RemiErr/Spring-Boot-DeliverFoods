@@ -101,7 +101,7 @@ public class DeliverService implements IService<Deliver> {
         try {
             deliver = jdbcTemplate.queryForObject(sql, new DeliverRowMapper(), userId);
         } catch (Exception e) {
-            System.err.println("[Wrong] 查無該筆資料： User Id=" + userId + "，該使用者未取得外送員身分！");
+            System.err.println("[Wrong] User Id=" + userId + "，該使用者未取得外送員身分！");
         }
         return deliver;
     }

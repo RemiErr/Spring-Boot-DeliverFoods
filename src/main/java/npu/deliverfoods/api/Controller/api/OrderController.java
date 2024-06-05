@@ -55,7 +55,7 @@ public class OrderController {
 
   // 建立訂單、關係 (Json)
   @PostMapping("/addition")
-  public void addFoodsToOrder(HttpServletRequest request,
+  public void addItemsToOrder(HttpServletRequest request,
       @RequestBody Map<String, StructFood[]> foodsMap) {
 
     // 取得新訂單 ID
@@ -77,8 +77,8 @@ public class OrderController {
     }
 
     // 測試用
-    loggedInUser = new User();
-    loggedInUser.setId(1L);
+    // loggedInUser = new User();
+    // loggedInUser.setId(1L);
 
     // 建立訂單資料
     Order newOrder = new Order();
@@ -107,6 +107,23 @@ public class OrderController {
     OrderItem orderItem = itemService.findByForignId(foodId, orderId);
     itemService.deleteByObject(orderItem);
   }
+
+  @PostMapping("/edit")
+  public void editItemFromOrder(HttpServletRequest request,
+      @RequestParam(name = "orderId") Long orderId,
+      @RequestBody Map<String, StructFood[]> foodsMap) {
+      
+    StructFood[] foods = foodsMap.get("foods");
+
+    for (StructFood food : foods) {
+      OrderItem orderItem = new OrderItem();
+      orderItem.setQuantity(food.getQuantity());
+      orderItem.setForeignKeys(orderId, food.getFoodId());
+
+      itemService.update(orderItem);
+    }
+}
+
 
   // 接單
   @PostMapping("/pickup")
@@ -154,24 +171,3 @@ class StructFood {
     this.quantity = quantity;
   }
 }
-
-/*
- * Json 格式如下：
- * {
- * "foods":
- * [
- * {
- * "foodId": 1,
- * "quantity": 11
- * },
- * {
- * "foodId": 2,
- * "quantity": 45
- * },
- * {
- * "foodId": 3,
- * "quantity": 14
- * }
- * ]
- * }
- */

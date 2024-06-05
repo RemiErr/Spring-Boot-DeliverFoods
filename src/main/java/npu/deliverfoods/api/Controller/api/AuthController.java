@@ -1,6 +1,7 @@
 package npu.deliverfoods.api.Controller.api;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import npu.deliverfoods.api.Service.Impl.DeliverService;
 import npu.deliverfoods.api.Service.Impl.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -77,21 +79,55 @@ public class AuthController {
   @PostMapping("/signup")
   public boolean signUp(HttpServletRequest request, HttpServletResponse response,
       @RequestBody User signUpUser) {
+        
+    session = request.getSession();
 
     if (signUpUser.getName() == null ||
         signUpUser.getName() == "" ||
         signUpUser.getPassword() == null ||
         signUpUser.getPassword() == "") {
       
-      session = request.getSession();
-      session.setAttribute("signUpError", "帳號或密碼不能為空");
+      session.setAttribute("signUpErrorMessage", "帳號或密碼不能為空");
       return false;
     }
 
-    Long latesUserId = userService.getUserLatestId();
+    // 檢查是否重複帳號
+    List<User> allUser = userService.findAll();
+    String signUpUserName = signUpUser.getName();
+    for (User user : allUser) {
+      if (user.getName().equals(signUpUserName)) {
+        session.setAttribute("signUpErrorMessage", "帳號已存在");
+        System.out.println("[Error] 已有存在的帳號 User-Name=" + user.getName());
+        return false;
+      }
+    }
+
+    // 生成帳號
+    Long latesUserId = userService.getLatesUsertId();
     signUpUser.setId(latesUserId);
     userService.save(signUpUser);
     return true;
   }
 
+  @PostMapping("/remove")
+  public void removeUser(HttpServletRequest request, HttpServletResponse response,
+        @RequestParam(name = "user", required = true) Long userId)
+        throws IOException {
+      
+      session = request.getSession();
+      User foundUser = userService.findById(userId);
+      User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+      if (loggedInUser == null) {
+        response.sendRedirect("/login");
+      } else if (foundUser == null) {
+        System.out.println("[Wrong] 查無該使用者 UserId=" + userId);
+      } else if (foundUser.getId() != loggedInUser.getId()) {
+        System.out.println("[Error] 無法刪除其他使用者！");
+      } else {
+        userService.deleteById(userId);
+        System.out.println("已成功刪除 UserId=" + userId);
+      }
+  }
+  
 }

@@ -44,7 +44,7 @@ public class UserService implements IService<User> {
     User user = null;
 
     try {
-      jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+      user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
     } catch (Exception e) {
       System.err.println("[Wrong] 未找到該 User 資料： User Id:" + id);
     }
@@ -67,7 +67,7 @@ public class UserService implements IService<User> {
 
   @Override
   public void deleteById(long id) {
-    jdbcTemplate.update("DELETE * FROM users WHERE user_id=?", id);
+    jdbcTemplate.update("DELETE FROM users WHERE user_id=?", id);
   }
 
   // 可能找到同名用戶，所以回傳使用 List
@@ -84,8 +84,8 @@ public class UserService implements IService<User> {
   }
 
   @SuppressWarnings("null")
-  public Long getUserLatestId() {
-    String sql = "SELECT TOP 1 user_id FROM users ORDER BY user_id DESC";
+  public Long getLatesUsertId() {
+    String sql = "SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1";
     Long latesId = 1L;
 
     try {
