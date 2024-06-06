@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Error</title>
+    <title>Orders List</title>
 </head>
 <body>
-    <h1 th:text="${map.get('waiting').orderId}"></h1>
-    <table>
-        <tr>
-            <th>Food Name</th>
-            <th>Price</th>
-        </tr>
-        <tr th:each="item : ${map.get('waiting').items}">
-            <td th:text="${item.foodName}">ID</td>
-            <td th:text="${item.price}">Username</td>
-        </tr>
-    </table>
+    <h1 th:if="${data.arrived != null}">Arrived Orders List</h1>
+    <div th:if="${data.arrived != null}">
+        <div th:each="order : ${data.arrived}">
+            <h2>Order ID: <span th:text="${order.orderId}"></span></h2>
+            <p>Deliver Name: <span th:text="${order.deliverName}"></span></p>
+            <h3>Items:</h3>
+            <ul>
+                <li th:each="item : ${order.itemDeteilList}">
+                    <span th:text="${item.foodName}"></span> - 
+                    <span th:text="${item.foodType}"></span> - 
+                    <span th:text="${item.price}"></span> NTD x 
+                    <span th:text="${item.quantity}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <h1 th:if="${data.arrived != null}">Waiting Orders List</h1>
+    <div th:if="${data.waiting != null}">
+        <div th:each="order : ${data.waiting}">
+            <h2>Order ID: <span th:text="${order.orderId}"></span></h2>
+            <p>Deliver Name: <span th:text="${order.deliverName}"></span></p>
+            <h3>Items:</h3>
+            <ul>
+                <li th:each="item : ${order.itemDeteilList}">
+                    <span th:text="${item.foodName}"></span> - 
+                    <span th:text="${item.foodType}"></span> - 
+                    <span th:text="${item.price}"></span> NTD x 
+                    <span th:text="${item.quantity}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

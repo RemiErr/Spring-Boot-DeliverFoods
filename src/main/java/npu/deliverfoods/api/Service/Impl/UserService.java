@@ -97,11 +97,12 @@ public class UserService implements IService<User> {
     return latesId;
   }
 
-  public String getNameByDeliverId(Long id) {
-    String sql = "SELECT user_name FROM users, orders " + 
-                 "WHERE (users.user_id = orders.user_id) " + 
-                 "AND deliver_id=?";
-    return jdbcTemplate.queryForObject(sql, String.class, id);
+  public String getNameByOrderIdAndDeliverId(Long oid, Long did) {
+    String sql = "SELECT user_name FROM users, orders, delivers " + 
+                 "WHERE (delivers.user_id = users.user_id) " + 
+                 "AND (delivers.deliver_id = orders.deliver_id) " + 
+                 "AND orders.order_id=? AND delivers.deliver_id=?";
+    return jdbcTemplate.queryForObject(sql, String.class, oid, did);
   }
 
 }

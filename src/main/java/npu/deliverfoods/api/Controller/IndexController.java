@@ -118,11 +118,6 @@ public class IndexController {
         User foundUser = userService.findById(loggedInUser.getId());
         model.addAttribute("user", foundUser);
 
-        // List<Order> foundAllOrder =
-        // orderService.findByUserIdForList(loggedInUser.getId());
-        // model.addAttribute("orders", foundAllOrder);
-
-        // Deliver foundDeliver = deliverService.findByUserId(loggedInUser.getId());
         // 外送中清單
         model = getAllOrderDetail(model, orderService.findAllDeliveringOrder());
         // 已送達清單
@@ -146,22 +141,11 @@ public class IndexController {
         if (foundUser == null)
             return "redirect:/login";
 
+        // 當前使用者所有訂單
         List<Order> foundAllOrder = orderService.findByUserIdForList(loggedInUser.getId());
-        List<String> pickedDeliverList = new ArrayList<String>();
+        model = getAllOrderDetail(model, foundAllOrder);
 
-        for (Order foundOrder : foundAllOrder) {
-            // 外送員也是使用者，所以先從訂單取得外送員 ID，再以此找出該外送員的用戶名
-            Long foundDeliverId = foundOrder.getFkDeliverId();
-            if (foundDeliverId != null && !foundDeliverId.equals(0L)) {
-                pickedDeliverList.add(userService.getNameByDeliverId(foundDeliverId));
-            } else {
-                pickedDeliverList.add("外送員準備中");
-            }
-        }
-
-        model.addAttribute("orders", foundAllOrder);
-        model.addAttribute("deliverList", pickedDeliverList);
-
+        
         return "cart";
     }
 
@@ -169,16 +153,15 @@ public class IndexController {
 
     // 要顯示訂單狀態、內含品項，打包成 Model
     public Model getAllOrderDetail(Model model, List<Order> allOrder) {
-      // List<Order> allOrder = orderService.findAllWaitingOrder();
-      List<ItemDeteil> itemDeteilList = new ArrayList<>();                  // 品項清單
-      List<OrderDetail> orderDetailList = new ArrayList<>();                // 詳細資料
-      List<Food> allFood = foodService.findAll();
-      // Map<String, List<OrderDetail>> orderDetailMap = new HashMap<>();      // 打包
-
       // 防止空陣列
       if (allOrder == null || allOrder.isEmpty()) {
         return model;
       }
+
+      List<ItemDeteil> itemDeteilList = new ArrayList<>();                  // 品項清單
+      List<OrderDetail> orderDetailList = new ArrayList<>();                // 詳細資料
+      Map<String, List<OrderDetail>> data = new HashMap<>();
+      List<Food> allFood = foodService.findAll();
       
       for (Order order : allOrder) {
         Long foundDeliverId = 0L;
@@ -211,7 +194,7 @@ public class IndexController {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId(order.getId());
         if (foundDeliver != null) {
-          orderDetail.setDeliverName(userService.getNameByDeliverId(foundDeliver.getId()));
+          orderDetail.setDeliverName(userService.getNameByOrderIdAndDeliverId(order.getId(), foundDeliver.getId()));
           orderDetail.setDeliverId(foundDeliver.getId());
         } else {
           orderDetail.setDeliverName(null);
@@ -219,10 +202,10 @@ public class IndexController {
         }
         orderDetail.setItemDeteilList(itemDeteilList);
         orderDetailList.add(orderDetail);
+        data.put(order.getState(), orderDetailList);
       }
-      // orderDetailMap.put(allOrder.get(0).getState(), orderDetailList);
 
-      model.addAttribute(allOrder.get(0).getState(), orderDetailList);
+      model.addAttribute("data", data);
       return model;
     }
 

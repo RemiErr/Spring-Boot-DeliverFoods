@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -6,17 +6,18 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>All Users</h1>
+    <h1>All Orders</h1>
     <table>
         <tr>
             <th>ID</th>
-            <th>Username</th>
+            <th>Order</th>
+            <th>State</th>
         </tr>
         <tr th:each="order : ${orders}">
-            <td th:text="${order.id}">ID</td>
-            <td th:text="${order.name}">Username</td>
+            <td th:text="${order.orderId}">ID</td>
+            <td th:text="${deliverList}">Order</td>
             <td th:text="${order.state}">State</td>
-            <!-- <td th:text="${order.deliverId}">Deliver ID</td> -->
+            <td th:text="${order.deliverId}">Deliver ID</td>
         </tr>
     </table>
     <form action="/api/auth/logout" method="post">
@@ -24,4 +25,45 @@
     </form>
 </body>
 </html>
+ -->
 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders List</title>
+</head>
+<body>
+    <h1 th:if="${data.arrived != null}">Arrived Orders List</h1>
+    <div th:if="${data.arrived != null}">
+        <div th:each="arrivedOrder : ${data.arrived}">
+            <h2>Order ID: <span th:text="${arrivedOrder.orderId}"></span></h2>
+            <p>Deliver Name: <span th:text="${arrivedOrder.deliverName}"></span></p>
+            <h3>Items:</h3>
+            <ul>
+                <li th:each="arrivedItem : ${arrivedOrder.itemDeteilList}">
+                    <span th:text="${arrivedItem.foodName}"></span> - 
+                    <span th:text="${arrivedItem.foodType}"></span> - 
+                    <span th:text="${arrivedItem.price}"></span> NTD x 
+                    <span th:text="${arrivedItem.quantity}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <h1 th:if="${data.waiting != null}">Waiting Orders List</h1>
+    <div th:if="${data.waiting != null}">
+        <div th:each="waitingOrder : ${data.waiting}">
+            <h2>Order ID: <span th:text="${waitingOrder.orderId}"></span></h2>
+            <p>Deliver Name: <span th:text="${waitingOrder.deliverName}"></span></p>
+            <h3>Items:</h3>
+            <ul>
+                <li th:each="waitingItem : ${waitingOrder.itemDeteilList}">
+                    <span th:text="${waitingItem.foodName}"></span> - 
+                    <span th:text="${waitingItem.foodType}"></span> - 
+                    <span th:text="${waitingItem.price}"></span> NTD x 
+                    <span th:text="${waitingItem.quantity}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
