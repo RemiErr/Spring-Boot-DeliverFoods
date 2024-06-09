@@ -32,30 +32,34 @@ public class OrderService implements IService<Order> {
     @Override
     public List<Order> findAll() {
         String sql = "SELECT * FROM orders";
-        List<Order> allOrder = null;
+        List<Order> orders = null;
 
         try {
-            allOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+            orders = jdbcTemplate.query(sql, new OrderRowMapper());
         } catch (Exception e) {
-            e.getStackTrace();
+            System.err.println("[ERROR] 該資料表為空");
         }
-        return allOrder;
+        return orders;
     }
 
     private List<Order> findAll(String sql) {
-        List<Order> allOrder = null;
+        List<Order> orders = null;
 
         try {
-            allOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+            orders = jdbcTemplate.query(sql, new OrderRowMapper());
         } catch (Exception e) {
-            e.getStackTrace();
+            System.err.println("[ERROR] 該狀態資料表為空");
         }
-        return allOrder;
+        return orders;
     }
     
     // 所有等待中的訂單
     public List<Order> findAllWaitingOrder() {
         String sql = "SELECT * FROM orders WHERE state='wairing'";
+        return this.findAll(sql);
+    }
+    public List<Order> findAllWaitingOrderByUserId(Long uid) {
+        String sql = "SELECT * FROM orders WHERE state='wairing' AND user_id=" + uid;
         return this.findAll(sql);
     }
     
@@ -64,20 +68,30 @@ public class OrderService implements IService<Order> {
         String sql = "SELECT * FROM orders WHERE state='delivering'";
         return this.findAll(sql);
     }
+    public List<Order> findAllDeliveringOrderByUserId(Long uid) {
+        String sql = "SELECT * FROM orders WHERE state='delivering' AND user_id=" + uid;
+        return this.findAll(sql);
+    }
     
     // 所有已送達的訂單
     public List<Order> findAllArrivedOrder() {
         String sql = "SELECT * FROM orders WHERE state='arrived'";
         return this.findAll(sql);
     }
+    public List<Order> findAllArrivedOrderByUserId(Long uid) {
+        String sql = "SELECT * FROM orders WHERE state='arrived' AND user_id=" + uid;
+        return this.findAll(sql);
+    }
 
     @Override
     public Order findById(long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE order_id=?", new OrderRowMapper(), id);
+        String sql = "SELECT * FROM orders WHERE order_id=?";
+        return jdbcTemplate.queryForObject(sql, new OrderRowMapper(), id);
     }
 
     public Order findByUserIdAndDeliverId(long uid, long did) {
-        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE user_id=? and deliver_id=?", new OrderRowMapper(), uid, did);
+        String sql = "SELECT * FROM orders WHERE user_id=? and deliver_id=?";
+        return jdbcTemplate.queryForObject(sql, new OrderRowMapper(), uid, did);
     }
 
     public List<Order> findByUserIdForList(long id) {
@@ -94,21 +108,20 @@ public class OrderService implements IService<Order> {
 
     @Override
     public void save(Order order) {
-        jdbcTemplate.update(
-                "INSERT INTO orders(order_id, state, user_id, deliver_id) VALUES(?, ?, ?, ?)",
-                order.getId(), order.getState(), order.getFkUserId(), order.getFkDeliverId());
+        String sql = "INSERT INTO orders(order_id, state, user_id, deliver_id) VALUES(?, ?, ?, ?)";
+        jdbcTemplate.update(sql, order.getId(), order.getState(), order.getFkUserId(), order.getFkDeliverId());
     }
 
     @Override
     public void update(Order order) {
-        jdbcTemplate.update(
-                "UPDATE orders SET state=?, user_id=?, deliver_id=? WHERE order_id=?",
-                order.getState(), order.getFkUserId(), order.getFkDeliverId(), order.getId());
+        String sql = "UPDATE orders SET state=?, user_id=?, deliver_id=? WHERE order_id=?";
+        jdbcTemplate.update(sql, order.getState(), order.getFkUserId(), order.getFkDeliverId(), order.getId());
     }
 
     @Override
     public void deleteById(long id) {
-        jdbcTemplate.update("DELETE * FROM orders WHERE order_id=?", id);
+        String sql = "DELETE * FROM orders WHERE order_id=?";
+        jdbcTemplate.update(sql, id);
     }
 
     public void updateOrderState(Long orderId) {

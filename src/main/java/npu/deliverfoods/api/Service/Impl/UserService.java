@@ -34,8 +34,17 @@ public class UserService implements IService<User> {
 
   @Override
   public List<User> findAll() {
+    // return jdbcTemplate.query(sql, new UserRowMapper());
     String sql = "SELECT * FROM users";
-    return jdbcTemplate.query(sql, new UserRowMapper());
+    List<User> users = null;
+
+        try {
+          users = jdbcTemplate.query(sql, new UserRowMapper());
+        } catch (Exception e) {
+            System.err.println("[ERROR] 該資料表為空");
+        }
+
+        return users;
   }
 
   @Override
@@ -53,21 +62,20 @@ public class UserService implements IService<User> {
 
   @Override
   public void save(User model) {
-    jdbcTemplate.update(
-        "INSERT INTO users(user_id, user_name, email, phone, address, password) VALUES(?, ?, ?, ?, ?, ?)",
-        model.getId(), model.getName(), model.getEmail(), model.getPhone(), model.getAddress(), model.getPassword());
+    String sql = "INSERT INTO users(user_id, user_name, email, phone, address, password) VALUES(?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(sql, model.getId(), model.getName(), model.getEmail(), model.getPhone(), model.getAddress(), model.getPassword());
   }
 
   @Override
   public void update(User model) {
-    jdbcTemplate.update(
-        "UPDATE users SET user_name=?, email=?, phone=?, address=?, password=? WHERE user_id=?",
-        model.getName(), model.getEmail(), model.getPhone(), model.getAddress(), model.getPassword(), model.getId());
+    String sql = "UPDATE users SET user_name=?, email=?, phone=?, address=?, password=? WHERE user_id=?";
+    jdbcTemplate.update(sql, model.getName(), model.getEmail(), model.getPhone(), model.getAddress(), model.getPassword(), model.getId());
   }
 
   @Override
   public void deleteById(long id) {
-    jdbcTemplate.update("DELETE FROM users WHERE user_id=?", id);
+    String sql = "DELETE FROM users WHERE user_id=?";
+    jdbcTemplate.update(sql, id);
   }
 
   // 可能找到同名用戶，所以回傳使用 List

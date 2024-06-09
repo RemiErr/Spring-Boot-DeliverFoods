@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OrderItem {
 
+    // Database Columns
     @JsonProperty("quantity")
     private int quantity;
     

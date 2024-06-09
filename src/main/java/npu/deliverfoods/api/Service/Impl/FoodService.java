@@ -32,8 +32,17 @@ public class FoodService implements IService<Food> {
 
   @Override
   public List<Food> findAll() {
+    // return jdbcTemplate.query(sql, new FoodRowMapper());
     String sql = "SELECT * FROM foods";
-    return jdbcTemplate.query(sql, new FoodRowMapper());
+    List<Food> foods = null;
+
+    try {
+      foods = jdbcTemplate.query(sql, new FoodRowMapper());
+    } catch (Exception e) {
+      System.err.println("[ERROR] 該資料表為空");
+      ;
+    }
+    return foods;
   }
 
   @Override
@@ -69,8 +78,12 @@ public class FoodService implements IService<Food> {
   }
 
   public void saveAll(List<Food> foods) {
-    for (Food food : foods) {
-      this.save(food);
+    try {
+      for (Food food : foods) {
+        this.save(food);
+      }
+    } catch (Exception e) {
+      e.getStackTrace();
     }
   }
 

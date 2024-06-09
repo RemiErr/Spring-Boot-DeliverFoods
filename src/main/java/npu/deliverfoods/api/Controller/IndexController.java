@@ -5,8 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-
 import jakarta.servlet.http.*;
 import npu.deliverfoods.api.Model.*;
 import npu.deliverfoods.api.Service.Impl.DeliverService;
@@ -119,9 +117,11 @@ public class IndexController {
         model.addAttribute("user", foundUser);
 
         // 外送中清單
-        model = getAllOrderDetail(model, orderService.findAllDeliveringOrder());
+        List<Order> foundAllDeliveringOrder = orderService.findAllDeliveringOrderByUserId(foundUser.getId());
+        model = getAllOrderDetail(model, foundAllDeliveringOrder);
         // 已送達清單
-        model = getAllOrderDetail(model, orderService.findAllArrivedOrder());
+        List<Order> foundAllArrivedOrder = orderService.findAllArrivedOrderByUserId(foundUser.getId());
+        model = getAllOrderDetail(model, foundAllArrivedOrder);
 
         return "dashboard";
     }
@@ -167,6 +167,9 @@ public class IndexController {
         Long foundDeliverId = 0L;
         Deliver foundDeliver = null;
 
+        // 下單的使用者
+        User foundUser = userService.findById(order.getFkUserId());
+
         try {
           foundDeliverId = orderService.getDeliverIdByOrderId(order.getId());
           foundDeliver = deliverService.findById(foundDeliverId);
@@ -175,7 +178,7 @@ public class IndexController {
         }
 
 
-        // 打包所有餐點品項資料
+        // 內層，打包所有餐點品項資料
         for (Food food : allFood) {
           if (itemService.checkRelation(food.getId(), order.getId())) {             
             ItemDeteil itemDeteil = new ItemDeteil();
@@ -190,9 +193,11 @@ public class IndexController {
           }
         }
 
-        // 中間層
+        // 外層
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId(order.getId());
+        orderDetail.setUserName(foundUser.getName());
+        orderDetail.setAddress(foundUser.getAddress());
         if (foundDeliver != null) {
           orderDetail.setDeliverName(userService.getNameByOrderIdAndDeliverId(order.getId(), foundDeliver.getId()));
           orderDetail.setDeliverId(foundDeliver.getId());
@@ -213,6 +218,8 @@ public class IndexController {
     // 前台顯示的訂單結構
     class OrderDetail {
         Long orderId;
+        String userName;
+        String address;
         Map<String, List<ItemDeteil>> itemDeteilList;
         Long deliverId;
         String deliverName;
@@ -223,6 +230,22 @@ public class IndexController {
 
         public void setOrderId(Long orderId) {
           this.orderId = orderId;
+        }
+
+        public String getUserName() {
+          return userName;
+        }
+
+        public void setUserName(String userName) {
+          this.userName = userName;
+        }
+
+        public String getAddress() {
+          return address;
+        }
+
+        public void setAddress(String address) {
+          this.address = address;
         }
 
         public List<ItemDeteil> getItemDeteilList() {
@@ -315,7 +338,7 @@ public class IndexController {
 
 /* 
 {
-  "wait": [
+  "data": [
     {
       "orderId": 1,
       "items":

@@ -3,8 +3,8 @@
     "version": "2.2.11",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -51,
-    "scrollLeft": -29,
+    "scrollTop": -54,
+    "scrollLeft": 0,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -97,7 +97,7 @@
             "id": "cfe583d7-2ec5-48d8-b42f-9936f10555f4",
             "name": "email",
             "comment": "電子信箱",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -112,7 +112,7 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           },
@@ -166,7 +166,7 @@
             "id": "7a40c66b-a53a-4ce5-97a3-3412f3591ed9",
             "name": "phone",
             "comment": "電話",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -181,7 +181,7 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           }
@@ -190,7 +190,7 @@
           "active": false,
           "left": 161.6004,
           "top": 150.2001,
-          "zIndex": 2,
+          "zIndex": 32,
           "widthName": 60,
           "widthComment": 60
         },
@@ -228,7 +228,7 @@
             "id": "4e6ebf5a-21ec-4911-863e-d77d4f2a39a2",
             "name": "trans_type",
             "comment": "車種",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -243,7 +243,7 @@
               "pfk": false,
               "widthName": 65.3369140625,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           },
@@ -251,7 +251,7 @@
             "id": "30a35216-47a1-4f7a-9f4c-38f9ad8c20df",
             "name": "license",
             "comment": "車牌號碼",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -266,7 +266,7 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           },
@@ -278,15 +278,15 @@
             "default": "",
             "option": {
               "autoIncrement": false,
-              "primaryKey": false,
+              "primaryKey": true,
               "unique": false,
               "notNull": true
             },
             "ui": {
               "active": false,
               "pk": false,
-              "fk": true,
-              "pfk": false,
+              "fk": false,
+              "pfk": true,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
@@ -296,9 +296,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 164.0889,
-          "top": 561.8903,
-          "zIndex": 6,
+          "left": 163.0889,
+          "top": 562.8903,
+          "zIndex": 45,
           "widthName": 60,
           "widthComment": 60
         },
@@ -336,7 +336,7 @@
             "id": "a6cc5ca8-4327-4a08-bb5d-05637912f4e5",
             "name": "state",
             "comment": "訂單狀態",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -351,7 +351,7 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           },
@@ -363,15 +363,15 @@
             "default": "",
             "option": {
               "autoIncrement": false,
-              "primaryKey": false,
+              "primaryKey": true,
               "unique": false,
               "notNull": true
             },
             "ui": {
               "active": false,
               "pk": false,
-              "fk": true,
-              "pfk": false,
+              "fk": false,
+              "pfk": true,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
@@ -386,15 +386,15 @@
             "default": "",
             "option": {
               "autoIncrement": false,
-              "primaryKey": false,
+              "primaryKey": true,
               "unique": false,
               "notNull": true
             },
             "ui": {
               "active": false,
               "pk": false,
-              "fk": true,
-              "pfk": false,
+              "fk": false,
+              "pfk": true,
               "widthName": 60.4873046875,
               "widthComment": 60,
               "widthDataType": 60,
@@ -406,7 +406,7 @@
           "active": false,
           "left": 547.8886,
           "top": 344.4441,
-          "zIndex": 7,
+          "zIndex": 44,
           "widthName": 60,
           "widthComment": 60
         },
@@ -448,15 +448,15 @@
             "default": "",
             "option": {
               "autoIncrement": false,
-              "primaryKey": true,
+              "primaryKey": false,
               "unique": false,
               "notNull": true
             },
             "ui": {
               "active": false,
               "pk": false,
-              "fk": false,
-              "pfk": true,
+              "fk": true,
+              "pfk": false,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
@@ -471,15 +471,15 @@
             "default": "",
             "option": {
               "autoIncrement": false,
-              "primaryKey": true,
+              "primaryKey": false,
               "unique": false,
               "notNull": true
             },
             "ui": {
               "active": false,
               "pk": false,
-              "fk": false,
-              "pfk": true,
+              "fk": true,
+              "pfk": false,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
@@ -489,9 +489,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 907.6445,
-          "top": 243.8651,
-          "zIndex": 20,
+          "left": 934.6445,
+          "top": 209.8651,
+          "zIndex": 36,
           "widthName": 74.35693359375,
           "widthComment": 60
         },
@@ -552,7 +552,7 @@
             "id": "5a3b9bbe-004d-478e-a899-9883de8de1a9",
             "name": "food_type",
             "comment": "種類",
-            "dataType": "CHAR",
+            "dataType": "VARCHAR",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -567,7 +567,7 @@
               "pfk": false,
               "widthName": 63.80078125,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 62.98828125,
               "widthDefault": 60
             }
           },
@@ -598,7 +598,7 @@
             "id": "05cb3a50-acea-4cc5-9e67-03334128f1e4",
             "name": "stock",
             "comment": "庫存",
-            "dataType": "INsadfasdfsadfTL",
+            "dataType": "INT",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -613,16 +613,16 @@
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
-              "widthDataType": 106.86962890625,
+              "widthDataType": 60,
               "widthDefault": 60
             }
           }
         ],
         "ui": {
-          "active": true,
-          "left": 1143.0657,
-          "top": 518.1985,
-          "zIndex": 22,
+          "active": false,
+          "left": 995.0657,
+          "top": 548.1985,
+          "zIndex": 41,
           "widthName": 60,
           "widthComment": 60
         },
@@ -638,7 +638,7 @@
     "relationships": [
       {
         "id": "8de979bd-11a3-416b-862f-0f68149d0740",
-        "identification": false,
+        "identification": true,
         "relationshipType": "ZeroOne",
         "startRelationshipType": "Dash",
         "start": {
@@ -655,8 +655,8 @@
           "columnIds": [
             "83ea8e78-ae79-4d62-aecc-23bc1ff7c55c"
           ],
-          "x": 288.25735703124997,
-          "y": 561.8903,
+          "x": 288.75149765624997,
+          "y": 562.8903,
           "direction": "top"
         },
         "constraintName": "fk_users_to_deliver",
@@ -664,7 +664,7 @@
       },
       {
         "id": "19723277-48f1-47b1-90a4-3fddd97185ea",
-        "identification": false,
+        "identification": true,
         "relationshipType": "ZeroN",
         "startRelationshipType": "Dash",
         "start": {
@@ -690,7 +690,7 @@
       },
       {
         "id": "028ad1a1-ae8c-4b63-a32c-ceecdecf5b4f",
-        "identification": true,
+        "identification": false,
         "relationshipType": "OneN",
         "startRelationshipType": "Dash",
         "start": {
@@ -698,7 +698,7 @@
           "columnIds": [
             "97a5a434-2042-47c2-8d4c-af5499b030aa"
           ],
-          "x": 791.3759046875,
+          "x": 794.3641859375,
           "y": 419.9441,
           "direction": "right"
         },
@@ -707,8 +707,8 @@
           "columnIds": [
             "13651b6c-4322-4bfa-be91-e3fbc285574f"
           ],
-          "x": 907.6445,
-          "y": 309.1151,
+          "x": 934.6445,
+          "y": 275.1151,
           "direction": "left"
         },
         "constraintName": "fk_orders_to_order_items",
@@ -716,7 +716,7 @@
       },
       {
         "id": "1ec3cd84-b699-4e62-a7b9-3ca2af433215",
-        "identification": true,
+        "identification": false,
         "relationshipType": "OneN",
         "startRelationshipType": "Dash",
         "start": {
@@ -724,8 +724,8 @@
           "columnIds": [
             "2c0acc6e-bacb-4272-aefb-31b7c8b827c2"
           ],
-          "x": 1293.595241015625,
-          "y": 518.1985,
+          "x": 1123.6545671875,
+          "y": 548.1985,
           "direction": "top"
         },
         "end": {
@@ -733,16 +733,16 @@
           "columnIds": [
             "9d5e16b2-9582-4181-8bc1-72dc6aaaf34c"
           ],
-          "x": 1150.6444999999999,
-          "y": 309.1151,
-          "direction": "right"
+          "x": 1056.1444999999999,
+          "y": 340.3651,
+          "direction": "bottom"
         },
         "constraintName": "fk_foods_to_order_items",
         "visible": true
       },
       {
         "id": "ef34c9d8-1f36-4b1e-8c41-1c6ea1d7f911",
-        "identification": false,
+        "identification": true,
         "relationshipType": "ZeroN",
         "startRelationshipType": "Dash",
         "start": {
@@ -751,8 +751,8 @@
             "d87a25f3-1390-4655-ac74-0b4d6ae40a96",
             "83ea8e78-ae79-4d62-aecc-23bc1ff7c55c"
           ],
-          "x": 412.42581406249997,
-          "y": 637.3903,
+          "x": 414.41409531249997,
+          "y": 638.3903,
           "direction": "right"
         },
         "end": {

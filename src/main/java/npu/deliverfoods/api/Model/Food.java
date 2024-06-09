@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Food {
 
+    // Database Columns
     @JsonProperty("foodId")
     private Long food_id;
     

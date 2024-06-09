@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Order {
 
+    // Database Columns
     @JsonProperty("orderId")
     private Long order_id;
 

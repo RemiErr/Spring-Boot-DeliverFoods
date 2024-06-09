@@ -2,16 +2,13 @@ package npu.deliverfoods.api.Service.Impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import npu.deliverfoods.api.Model.Order;
 import npu.deliverfoods.api.Model.OrderItem;
 import npu.deliverfoods.api.Service.IService;
 
@@ -33,8 +30,17 @@ public class ItemService implements IService<OrderItem> {
 
   @Override
   public List<OrderItem> findAll() {
+    // return jdbcTemplate.query(sql, new OrderItemRowMapper());
     String sql = "SELECT * FROM order_items";
-    return jdbcTemplate.query(sql, new OrderItemRowMapper());
+    List<OrderItem> orderItems = null;
+
+        try {
+            orderItems = jdbcTemplate.query(sql, new OrderItemRowMapper());
+        } catch (Exception e) {
+            System.err.println("[ERROR] 該資料表為空");;
+        }
+
+        return orderItems;
   }
 
   @Override

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Deliver {
 
+    // Database Columns
     @JsonProperty("deliverId")
     private Long deliver_id;
 
@@ -14,6 +15,7 @@ public class Deliver {
     private String license;
 
     // Foreign Key
+    @JsonProperty("userId")
     private Long userId;
 
     public Deliver() {
