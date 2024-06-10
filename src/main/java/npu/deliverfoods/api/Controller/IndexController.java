@@ -43,7 +43,7 @@ public class IndexController {
     private HttpSession session;
 
     // 首頁 (登入/登出)
-    @GetMapping({ "/", "/index" })
+    @GetMapping({"/", "/index"})
     public String index(HttpServletRequest request, Model model) {
 
         session = request.getSession();
@@ -72,14 +72,28 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+
+        session = request.getSession();
+        loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        // 如果已登入，導向主頁面
+        if (loggedInUser != null) {
+            return "redirect:/index";
+        }
+
         return "login";
+    }
+
+    @GetMapping("/error")
+    public String error() {
+      return "error";
     }
 
     // 外送接單後台
     @GetMapping("/pickup")
     public String pickUP(HttpServletRequest request, Model model) {
-
+ 
         session = request.getSession();
         loggedInUser = (User) session.getAttribute("loggedInUser");
 
@@ -102,9 +116,9 @@ public class IndexController {
         return "pick";
     }
 
-    // 使用者後台
-    @GetMapping("/dashboard")
-    public String dashboard(HttpServletRequest request, Model model) {
+    // 訂單歷史
+    @GetMapping("/history")
+    public String history(HttpServletRequest request, Model model) {
 
         session = request.getSession();
         loggedInUser = (User) session.getAttribute("loggedInUser");
@@ -123,7 +137,7 @@ public class IndexController {
         List<Order> foundAllArrivedOrder = orderService.findAllArrivedOrderByUserId(foundUser.getId());
         model = getAllOrderDetail(model, foundAllArrivedOrder);
 
-        return "dashboard";
+        return "history";
     }
 
     // 購物車
@@ -137,13 +151,9 @@ public class IndexController {
             return "redirect:/login";
         }
 
-        User foundUser = userService.findById(loggedInUser.getId());
-        if (foundUser == null)
-            return "redirect:/login";
-
-        // 當前使用者所有訂單
-        List<Order> foundAllOrder = orderService.findByUserIdForList(loggedInUser.getId());
-        model = getAllOrderDetail(model, foundAllOrder);
+        // 當前使用者所有等待中訂單
+        List<Order> foundAllWaitingOrder = orderService.findAllWaitingOrderByUserId(loggedInUser.getId());
+        model = getAllOrderDetail(model, foundAllWaitingOrder);
 
         
         return "cart";
@@ -158,12 +168,12 @@ public class IndexController {
         return model;
       }
 
-      List<ItemDeteil> itemDeteilList = new ArrayList<>();                  // 品項清單
-      List<OrderDetail> orderDetailList = new ArrayList<>();                // 詳細資料
-      Map<String, List<OrderDetail>> data = new HashMap<>();
+      Map<String, List<OrderDetail>> data = new HashMap<>();                  // 最後回傳的資料集
+      List<OrderDetail> orderDetailList = new ArrayList<>();                  // 詳細資料
       List<Food> allFood = foodService.findAll();
       
       for (Order order : allOrder) {
+        List<ItemDeteil> itemDeteilList = new ArrayList<>();                  // 品項清單
         Long foundDeliverId = 0L;
         Deliver foundDeliver = null;
 
@@ -180,7 +190,7 @@ public class IndexController {
 
         // 內層，打包所有餐點品項資料
         for (Food food : allFood) {
-          if (itemService.checkRelation(food.getId(), order.getId())) {             
+          if (itemService.checkRelation(food.getId(), order.getId())) {
             ItemDeteil itemDeteil = new ItemDeteil();
             itemDeteil.setFoodId(food.getId());
             itemDeteil.setFoodName(food.getName());
@@ -294,7 +304,7 @@ public class IndexController {
         double price;
         int quantity;
 
-        public Long getFoodId() {
+        public Long getId() {
           return foodId;
         }
 
@@ -335,25 +345,3 @@ public class IndexController {
         }
     }
 }
-
-/* 
-{
-  "data": [
-    {
-      "orderId": 1,
-      "items":
-      [
-        {
-            "foodId": 1,
-            "foodName": "Cookie",
-            "foodType": "dessert",
-            "price": 50,
-            "quantity": 5
-        }
-      ],
-      "deliverId": 2,
-      "deliverName": "ABC"
-    }
-  ]
-}
-*/

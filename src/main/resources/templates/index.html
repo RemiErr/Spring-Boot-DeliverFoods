@@ -1,28 +1,303 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <div th:if="${deliver}">
-        <p>Is Deliver.</p>
-    </div>
-    <h1>All Users</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-        </tr>
-        <tr th:each="food : ${foods}">
-            <td th:text="${food.id}">ID</td>
-            <td th:text="${food.name}">Username</td>
-        </tr>
-    </table>
-    <form action="/api/auth/logout" method="post">
-        <button type="submit">Logout</button>
-    </form>
-</body>
-</html>
+<html lang="en">
 
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <style>
+    .block {
+      /*測試用方塊*/
+      margin: 10px auto;
+      width: 150px;
+      height: 150px;
+      border: 10px solid #9ddfd3;
+      background-color: #bce6eb;
+      color: #274046;
+    }
+
+    .button {
+      /*按鈕樣式*/
+      width: 90px;
+      height: 60px;
+      line-height: 60px;
+      background-color: rgb(51, 51, 51);
+      margin: 0 auto;
+      border-radius: 100px;
+    }
+
+    .floatButton {
+      /*漂浮按鈕 給右下角那個購物車用的*/
+      position: fixed;
+      bottom: 30px;
+      margin: 0 auto;
+      right: 1%;
+    }
+
+    body {
+      /*設定全體字型*/
+      font-family: 'Arial', sans-serif;
+    }
+
+    .sidebar {
+      /*側邊欄基礎設定*/
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      /* Behind the navbar */
+      padding: 48px 0 0;
+      /* Height of navbar */
+      box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-sticky {
+      /*側邊欄鎖定位置*/
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 48px);
+      padding-top: 0.5rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+      /* Scrollable contents if viewport is shorter than content. */
+    }
+
+    .sidebar .nav-link {
+      /*側邊欄連結樣式 下面兩個也都是*/
+      font-weight: 500;
+      color: #333;
+    }
+
+    .sidebar .nav-link .feather {
+      margin-right: 4px;
+      color: #999;
+    }
+
+    .sidebar .nav-link.active {
+      color: #007bff;
+    }
+
+    .btn-demo {
+      /*加入購物車按鈕設定*/
+      position: relative;
+      width: 100px;
+      padding: 6px 12px;
+      text-align: left;
+    }
+
+    .btn-demo-label {
+      /*加入購物車按鈕設定*/
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: inline-block;
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 0 3px 3px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 下面這個div把整個header包起來 -->
+  <div class="container">
+    <!-- 下面這個div把header劃分成一個row -->
+    <div class="row g-3">
+      <!-- 下面這個div把header劃分成一整個column 方便之後分割 如果有要分的話就再切一個column出來 -->
+      <div class="col">
+        <header>
+          <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-secondary">
+            <!-- 下面這個div把header的東西都變水平的 -->
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">訂餐</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <!-- 下面這個div把header上的Home單獨切出來 如果之後有要加其他東西也可以直接從這邊加li就可以了 -->
+              <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                  <li class="nav-item" th:if="${deliver != null}">
+                    <!-- 這裡的東西也可以改成連結到其他地方的按鈕 但目前其實就只是顯示現在在哪個頁面的title而已 -->
+                    <a class="nav-link active" aria-current="page" href="#">接單系統</a>
+                  </li>
+                  <!-- <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="#">範例</a>
+                                        </li> -->
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+      </div>
+    </div>
+  </div>
+  <!-- 下面這個nav是側邊欄 不跟主區塊塞一起最主要是因為bootstrap的網格系統已經自備側邊欄了 不包含在col裡面 但我這邊用CSS寫的 塞在style裡面 就把它獨立出來-->
+  <nav class="sidebar bg-light">
+    <div class="sidebar-sticky">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            <span data-feather="home"></span>
+            首頁
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/cart">
+            <span data-feather="shopping-cart"></span>
+            購物車
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/history">
+            <span data-feather="shopping-cart"></span>
+            歷史訂單
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/Customers">
+            <span data-feather="bar-chart-2"></span>
+            使用者後台
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" th:onclick="logOut()">
+            <span data-feather="bar-chart-2"></span>
+            登出
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <!-- 下面這個div把整個主要空間包起來 現在主要是那個列表-->
+  <div class="container my-5">
+    <!-- 定義row -->
+    <div class="row gx-3 ">
+      <!-- 下面這個div是為了跟側邊欄有距離 所以把第一個column空著 不然會貼在一起 -->
+      <div class="col-1">
+
+      </div>
+      <!-- 下面這個div就是把剩下的column都切給那個列表 -->
+      <div class="col d-flex">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="col-2">餐點名稱</th>
+              <th class="col-2">類型</th>
+              <th class="col-2">價格</th>
+              <th class="col-2">份量</th>
+              <th class="col-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr th:each="food : ${foods}">
+              <th scope="row" th:text="${food.name}"></th>
+              <td th:text="${food.foodType}"></td>
+              <td th:text="${food.price}"></td>
+              <td>
+                <input type="number" class="form-control" th:id="'quantity-' + ${food.id}" min="1"
+                  th:max="${food.stock}" value="0">
+              </td>
+              <td>
+                <button class="btn btn-secondary btn-demo" th:onclick="'addToCart(' + ${food.id} + ')'">
+                  <span class="btn-demo-label">
+                    <i class="fa-solid fa-cart-plus"></i>
+                  </span>
+                  加入
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+  <!-- 這東東是漂浮購物車按鈕 -->
+  <button class='button floatButton text-center text-white'
+    id='floatButton' th:onclick="submitCart()">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span class="badge bg-secondary" id="cart-quantity">0</span>
+  </button>
+
+
+
+  <!-- JabaScript -->
+  <script>
+    const cart = [];
+    
+    function addToCart(foodId) {
+      const quantityInput = document.getElementById(`quantity-${foodId}`);
+      const quantity = parseFloat(quantityInput.value);
+      var total = 0;
+
+      if (quantity == 0) {
+        return;
+      }
+
+      const existingFoodIndex = cart.findIndex(item => item.foodId === foodId);
+      if (existingFoodIndex !== -1) {
+        cart[existingFoodIndex].quantity = quantity;
+      } else {
+        cart.push({ foodId, quantity });
+      }
+      
+      cart.forEach(element => {
+          total += element.quantity;
+      });
+      document.getElementById('cart-quantity').innerHTML = total;
+      alert(`餐點ID: ${foodId} 已新增至購物車，數量: ${quantity}`);
+    }
+
+    function submitCart() {
+      const postData = { foods: cart };
+
+      fetch('/api/order/addition', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+        .then(response => {
+          if (response.status === 200) {
+            alert('訂單已提交成功');
+            location.reload();
+          } else {
+            console.log('Response status:', response.status);
+          }
+        });
+    }
+
+    function logOut() {
+      fetch('/api/auth/logout', {
+        method: 'POST',
+      })
+        .then(response => {
+          if (response.status === 200) {
+            location.reload();
+          } else {
+            console.log('Response status:', response.status);
+          }
+        });
+    }
+
+    // document.getElementById('cart-quantity').addEventListener('click', function () {
+      
+    // });
+  </script>
+</body>
+
+</html>

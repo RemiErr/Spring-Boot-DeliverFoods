@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import npu.deliverfoods.api.Model.*;
 import npu.deliverfoods.api.Service.Impl.DeliverService;
+import npu.deliverfoods.api.Service.Impl.FoodService;
 import npu.deliverfoods.api.Service.Impl.ItemService;
 import npu.deliverfoods.api.Service.Impl.OrderService;
 
@@ -33,7 +34,7 @@ public class OrderController {
   private ItemService itemService;
 
   @Autowired
-  private DeliverService deliverService;
+  private FoodService foodService;
 
   private HttpSession session;
 
@@ -62,37 +63,49 @@ public class OrderController {
     // 取得新訂單 ID
     Long newOrderId = orderService.getOrderLatestId();
 
-    // 所有品項
+    // 訂單中所有餐點
     List<StructFood> foods = foodsMap.get("foods");
 
     // 當前使用者
     session = request.getSession();
     User loggedInUser = (User) session.getAttribute("loggedInUser");
     Long loggedInUserId = loggedInUser.getId();
-    Long loggedInUserFkDeliverId = null;
-
-    try {
-      loggedInUserFkDeliverId = deliverService.findByUserId(loggedInUserId).getId();
-    } catch (Exception e) {
-      e.getStackTrace();
-    }
 
     // 建立訂單資料
     Order newOrder = new Order();
     newOrder.setId(newOrderId);
     newOrder.setState(eS.等待中.get());
-    newOrder.setForeignKeys(loggedInUser.getId(), loggedInUserFkDeliverId);
-
-    orderService.save(newOrder);
+    newOrder.setForeignKeys(loggedInUserId, null);
 
     // 可能有多個品項
+    boolean orderSafety = false;
     for (StructFood food : foods) {
+      int foodQuantity = food.getQuantity();
       OrderItem orderItem = new OrderItem();
-      orderItem.setQuantity(food.getQuantity());
+      orderItem.setQuantity(foodQuantity);
       orderItem.setForeignKeys(newOrderId, food.getFoodId());
 
-      itemService.save(orderItem);
+      // 更新庫存
+      Food foundFood = foodService.findById(food.getFoodId());
+      Long stock = foundFood.getStock();
+
+      // 庫存 - 訂單餐點數
+      if (stock >= foodQuantity) {
+        foundFood.setStock(stock - foodQuantity);
+        foodService.update(foundFood);
+        itemService.save(orderItem);
+        orderSafety = true;
+      } else {
+        System.out.println("[Wrong] Lacking stock, " + stock + " are left.");
+      }
     }
+
+    if (orderSafety) {
+      orderService.save(newOrder);
+    } else {
+      System.out.println("[Wrong] 沒有任何餐點，訂單不成立。");
+    }
+    
   }
 
   // 移除品項

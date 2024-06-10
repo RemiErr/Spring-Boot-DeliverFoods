@@ -55,11 +55,11 @@ public class OrderService implements IService<Order> {
     
     // 所有等待中的訂單
     public List<Order> findAllWaitingOrder() {
-        String sql = "SELECT * FROM orders WHERE state='wairing'";
+        String sql = "SELECT * FROM orders WHERE state='waiting'";
         return this.findAll(sql);
     }
     public List<Order> findAllWaitingOrderByUserId(Long uid) {
-        String sql = "SELECT * FROM orders WHERE state='wairing' AND user_id=" + uid;
+        String sql = "SELECT * FROM orders WHERE state='waiting' AND user_id=" + uid;
         return this.findAll(sql);
     }
     

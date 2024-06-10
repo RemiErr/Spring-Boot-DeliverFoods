@@ -67,7 +67,7 @@ public class FoodService implements IService<Food> {
 
   @Override
   public void update(Food food) {
-    String sql = "UPDATE foods SET food_name, food_type, price, stock WHERE food_id=?";
+    String sql = "UPDATE foods SET food_name=?, food_type=?, price=?, stock=? WHERE food_id=?";
     jdbcTemplate.update(sql, food.getName(), food.getFoodType(), food.getPrice(), food.getStock(), food.getId());
   }
 

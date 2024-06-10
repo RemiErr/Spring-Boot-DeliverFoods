@@ -12,8 +12,6 @@ import npu.deliverfoods.api.Model.Deliver;
 import npu.deliverfoods.api.Model.User;
 import npu.deliverfoods.api.Service.Impl.DeliverService;
 import npu.deliverfoods.api.Service.Impl.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -29,7 +27,7 @@ public class AuthController {
   HttpSession session;
 
   @PostMapping("/login")
-  public void login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
+  public void login(HttpServletRequest request, HttpServletResponse response, @RequestBody User user)
       throws IOException {
 
     session = request.getSession();
@@ -43,8 +41,6 @@ public class AuthController {
       authorized = foundUser.getPassword().equals(user.getPassword());
     } else {
       session.setAttribute("loginMessage", user.getName() + "不存在的帳號");
-      response.sendRedirect("/login");
-      return;
     }
 
     // 將參數一起重新導向至對應頁面
@@ -78,6 +74,7 @@ public class AuthController {
     session = request.getSession();
     session.invalidate();
     response.sendRedirect("/login");
+    return;
   }
 
   @PostMapping("/signup")

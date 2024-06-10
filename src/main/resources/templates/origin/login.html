@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用者登入</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">使用者登入</h1>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="name" class="form-label">使用者名稱</label>
+        <input type="text" class="form-control" id="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">密碼</label>
+        <input type="password" class="form-control" id="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">登入</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      // 取消事件的預設行為，以下方程式結果為主
+      event.preventDefault();
+
+      // dataset colunms
+      const name = document.getElementById('name').value;
+      const password = document.getElementById('password').value;
+
+      // result
+      const postData = { name, password };
+
+      // 發送 Request
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+        // 擷取 Response
+        .then(response => {
+          // 200狀態 刷新頁面
+          if (response.status === 200) {
+            location.reload();
+          } else {
+            console.log('Response status:', response.status);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  </script>
+</body>
+
+</html>
