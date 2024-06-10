@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>餐點清單</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">餐點清單</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>餐點名稱</th>
+          <th>類型</th>
+          <th>價格</th>
+          <th>庫存</th>
+          <th>數量</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="food : ${foods}">
+          <td th:text="${food.name}">餐點名稱</td>
+          <td th:text="${food.foodType}">類型</td>
+          <td th:text="${food.price}">價格</td>
+          <td th:text="${food.stock}">庫存</td>
+          <td>
+            <input type="number" class="form-control" th:id="'quantity-' + ${food.id}" min="1" th:max="${food.stock}" value="1">
+          </td>
+          <td>
+            <button class="btn btn-primary" th:onclick="'addToCart(' + ${food.id} + ')'">新增至購物車</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" th:onclick="logOut()">登出</button>
+  </div>
+  <script>
+    const cart = [];
+
+    function addToCart(foodId) {
+      const quantityInput = document.getElementById(`quantity-${foodId}`);
+      const quantity = quantityInput.value;
+      
+      const existingFoodIndex = cart.findIndex(item => item.foodId === foodId);
+      if (existingFoodIndex !== -1) {
+        cart[existingFoodIndex].quantity = quantity;
+      } else {
+        cart.push({ foodId, quantity });
+      }
+      alert(`餐點ID: ${foodId} 已新增至購物車，數量: ${quantity}`);
+    }
+
+    function submitCart() {
+      const postData = { foods: cart };
+
+      fetch('/api/cart', { // Replace with your API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('購物車已提交成功');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+
+    function logOut() {
+        fetch('/api/auth/logout', {
+            method: 'POST',
+        })
+    }
+  </script>
+  <!-- <script>
+    function addToCart(food_id) {
+      const quantity = document.getElementById(`quantity-${food_id}`).value;
+      const postData = { food_id, quantity };
+
+      fetch('/api/order/addition', { // Replace with your API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(`餐點ID: ${food_id} 已新增至購物車，數量: ${quantity}`);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script> -->
+</body>
+</html>
