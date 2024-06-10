@@ -1,24 +1,140 @@
+<!-- circledog/endProject -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <form action="/api/auth/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="name">
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
-        <br>
-        <button type="submit">Login</button>
-    </form>
-    <div th:if="${param.error}">
-        <p>Invalid username or password.</p>
-    </div>
-</body>
-</html>
+<html xmlns:th="http://www.thymeleaf.org">
 
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <title>login</title>
+  <style>
+    /* 讓整個畫面滿版 不然下面會有空格 */
+    html,
+    body {
+      height: 100%;
+    }
+
+    /* 把連結的底線跟顏色用掉 */
+    a {
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: none
+    }
+
+    /* 背景顏色設定 */
+    .back {
+      background-color: rgba(193, 216, 216, 0.966);
+      background-image: var(--bs-gradient);
+    }
+
+    /* 設定輸入框框大小 */
+    .form-signin {
+      max-width: 330px;
+      padding: 1rem;
+    }
+
+    /* 讓點擊輸入框時外面的藍色框一定會在最上層 */
+    .form-signin .form-floating:focus-within {
+      z-index: 2;
+    }
+
+    /* 縮短email那欄的下間隔 才能跟密碼欄貼在一起 順便把右下跟左下的圓角去掉 其實就美化細節而已 沒啥大影響 */
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    /* 這裡跟上面一樣 只是變成增加下間隔 才會跟登入按鈕有距離 然後去掉上面的兩個圓弧角 */
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    .icon {
+      margin-bottom: 20px;
+      font-size: 100px;
+      color: rgb(9, 17, 76);
+    }
+  </style>
+</head>
+
+
+<body class="d-flex back">
+  <!-- 把整個主體包起來 -->
+  <div class="form-signin w-100 m-auto">
+    <form id="loginForm">
+      <!-- 讓圖案在中間 -->
+      <div class="text-center">
+        <i class="fa-solid fa-user icon "></i>
+      </div>
+      <h1 class="h3 mb-3 fw-normal text-center"><b>sign in</b></h1>
+
+      <!-- 把Email欄包起來 -->
+      <div class="form-floating">
+        <input type="text" class="form-control" id="floatingInput" placeholder="User Name" required>
+        <label for="floatingInput">使用者帳號</label>
+      </div>
+      <!-- 把密碼欄包起來 -->
+      <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+        <label for="floatingPassword">密碼</label>
+      </div>
+
+      <!-- 登入按鈕 -->
+      <button class="btn btn-primary w-100 py-2" type="submit">登入</button>
+      <!-- 註冊連結 -->
+      <!-- TODO: 連結 -->
+      <a class="link-secondary" href="#">Sign Up</a>
+    </form>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+    crossorigin="anonymous"></script>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      // 取消事件的預設行為，以下方程式結果為主
+      event.preventDefault();
+
+      // dataset colunms
+      const name = document.getElementById('floatingInput').value;
+      const password = document.getElementById('floatingPassword').value;
+
+      // result
+      const postData = { name, password };
+
+      // 發送 Request
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+        // 擷取 Response
+        .then(response => {
+          // 200狀態 刷新頁面
+          if (response.status === 200) {
+            location.reload();
+          } else {
+            console.log('Response status:', response.status);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  </script>
+
+</body>
+
+</html>
