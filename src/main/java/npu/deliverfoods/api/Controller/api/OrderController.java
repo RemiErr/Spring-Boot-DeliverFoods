@@ -4,16 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import npu.deliverfoods.api.Model.*;
-import npu.deliverfoods.api.Service.Impl.DeliverService;
 import npu.deliverfoods.api.Service.Impl.FoodService;
 import npu.deliverfoods.api.Service.Impl.ItemService;
 import npu.deliverfoods.api.Service.Impl.OrderService;
@@ -105,11 +100,11 @@ public class OrderController {
     } else {
       System.out.println("[Wrong] 沒有任何餐點，訂單不成立。");
     }
-    
+
   }
 
   // 移除品項
-  @PostMapping("/remove")
+  @DeleteMapping("/remove")
   public void removeItemFromOrder(HttpServletRequest request,
       @RequestParam(name = "orderId") Long orderId,
       @RequestParam(name = "foodId") Long foodId) {
@@ -119,7 +114,7 @@ public class OrderController {
   }
 
   // 修改品項數量
-  @PostMapping("/edit")
+  @PutMapping("/edit")
   public void editItemFromOrder(HttpServletRequest request,
       @RequestBody Map<String, List<OrderItem>> foodsMap) {
 
@@ -129,8 +124,8 @@ public class OrderController {
 
   // 接單
   @PostMapping("/pickup")
-  public void pickOrder(@RequestBody Order order,
-      HttpServletRequest request,
+  public void pickOrder(HttpServletRequest request,
+      @RequestBody Order order,
       @RequestParam(name = "deliverId") Long deliverId) {
 
     // session = request.getSession();
@@ -144,8 +139,9 @@ public class OrderController {
 
   // 完成訂單
   @PostMapping("/complate")
-  public void complateOrder(@RequestParam(name = "orderId") Long orderId,
-      HttpServletRequest request) throws Exception {
+  public void complateOrder(HttpServletRequest request,
+      @RequestParam(name = "orderId") Long orderId)
+      throws Exception {
 
     Order foundOrder = orderService.findById(orderId);
 

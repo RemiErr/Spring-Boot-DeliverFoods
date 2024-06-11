@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -8,9 +8,10 @@
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <meta charset="UTF-8">
-  <title>Orders List</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>帳號資訊</title>
 
-  <link rel="stylesheet" href="../static/js/func.js" th:href="@{/func.js}">
+  <link rel="stylesheet" th:href="@{../static/js/func.js}">
 
   <style>
     .block {
@@ -104,15 +105,11 @@
       background: rgba(0, 0, 0, 0.15);
       border-radius: 0 3px 3px 0;
     }
-
-    .border {
-      background-color: #99999983;
-      border-radius: 10px;
-    }
   </style>
 </head>
 
 <body>
+
   <!-- 下面這個div把整個header包起來 -->
   <div class="container">
     <!-- 下面這個div把header劃分成一個row -->
@@ -191,64 +188,91 @@
       </div>
       <!-- 下面這個div就是把剩下的column都切給那個列表 -->
       <div class="col d-flex">
-
-        <!-- 訂單資訊 -->
         <div class="container mt-5">
-          <div th:if="${data != null && data.get('arrived') != null}">
-            <h1 class="mb-4">已送達的訂單：</h1>
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col-1">單號</th>
-                  <th scope="col">使用者</th>
-                  <th scope="col">外送員</th>
-                  <th scope="col">送餐地址</th>
-                  <th scope="col-6">品項</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr th:each="order : ${data.get('arrived')}">
-                  <td th:text="${order.orderId}"></td>
-                  <td th:text="${order.userName}"></td>
-                  <td th:text="${order.deliverName}"></td>
-                  <td th:text="${order.address}"></td>
-                  <td>
-                    <div class="row">
-                      <div class="col-6" th:each="item : ${order.itemDeteilList}">
-                        <div class="border p-2">
-                          <div th:text="${item.foodName}"></div>
-                          <div th:text="${item.foodType}"></div>
-                          <div th:text="'$' + ${item.price} + ' NTD'"></div>
-                          <div th:text="${item.quantity} + ' 份，共 $' + ${item.price * item.quantity} + ' NTD'"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div th:if="${data?.get('arrived') == null}">
-            <div class="card text-dark bg-warning mb-3">
-              <div class="card-header text-center">
-                <i class="fa-solid fa-face-sad-cry"></i>
-                糟糕
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-center">沒有已完成的訂單資訊</h5>
-                <p class="card-text text-center">拜託啦 訂餐啦</p>
-              </div>
+          <h1 class="mb-4">帳號資訊</h1>
+          <form id="updateForm">
+            <input type="hidden" class="form-control" id="userId" th:value="${user.id}" required>
+            <div class="mb-3">
+              <label for="name" class="form-label">使用者名稱</label>
+              <input type="text" class="form-control" id="name" th:value="${user.name}" required>
             </div>
-          </div>
-
+            <div class="mb-3">
+              <label for="email" class="form-label">電子郵件</label>
+              <input type="email" class="form-control" id="email" th:value="${user.email}" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">電話號碼</label>
+              <input type="tel" class="form-control" id="phone" th:value="${user.phone}" required>
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">地址</label>
+              <input type="text" class="form-control" id="address" th:value="${user.address}" required>
+            </div>
+            <div class="d-grid gap-2 col-8 mx-auto">
+              <button type="submit" class="btn btn-primary cne">更新資料</button>
+              <hr class="col-10" style="margin-left: auto; margin-right: auto;">
+              <button type="button" class="btn btn-danger" onclick="deleteAccount()">刪除帳號</button>
+            </div>
+          </form>
         </div>
-
       </div>
+
     </div>
   </div>
 
   <script>
+    document.getElementById('updateForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const userId = document.getElementById('userId').value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const address = document.getElementById('address').value;
+
+      const postData = { name, email, phone, address };
+
+      fetch('/api/auth/edit?user=' + userId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+        .then(response => {
+          if (response.status === 200) {
+            alert('資料更新成功，請重新登入');
+            location.href="/";
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('資料更新失敗');
+        });
+    });
+
+    function deleteAccount() {
+      const userId = document.getElementById('userId').value;
+      if (confirm('您確定要刪除帳號嗎？此操作不可恢復。')) {
+        fetch('/api/auth/remove?user=' + userId, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            if (response.status === 200) {
+              alert('帳號已刪除');
+              location.href="/";
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('刪除帳號失敗');
+          });
+      }
+    }
+
     function logOut() {
       fetch('/api/auth/logout', {
         method: 'POST',
@@ -262,7 +286,6 @@
         });
     }
   </script>
-
 </body>
 
 </html>

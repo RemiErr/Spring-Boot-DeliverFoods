@@ -11,6 +11,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
+
+  <link rel="stylesheet" href="../static/js/func.js" th:href="@{/js/func.js}">
+
   <style>
     .block {
       /*測試用方塊*/
@@ -163,16 +166,16 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:8080/Customers">
+          <a class="nav-link" href="/info">
             <span data-feather="bar-chart-2"></span>
-            使用者後台
+            帳號資訊
           </a>
         </li>
         <li class="nav-item">
-          <button class="nav-link" th:onclick="logOut()">
+          <a class="nav-link" href th:onclick="logOut()">
             <span data-feather="bar-chart-2"></span>
             登出
-          </button>
+          </a>
         </li>
       </ul>
     </div>
@@ -193,6 +196,7 @@
             <tr>
               <th class="col-2">餐點名稱</th>
               <th class="col-2">類型</th>
+              <th class="col-2">庫存</th>
               <th class="col-2">價格</th>
               <th class="col-2">份量</th>
               <th class="col-1"></th>
@@ -203,6 +207,7 @@
             <tr th:each="food : ${foods}">
               <th scope="row" th:text="${food.name}"></th>
               <td th:text="${food.foodType}"></td>
+              <td th:text="${food.stock}"></td>
               <td th:text="${food.price}"></td>
               <td>
                 <input type="number" class="form-control" th:id="'quantity-' + ${food.id}" min="1"
@@ -225,7 +230,6 @@
     </div>
   </div>
 
-  </div>
   <!-- 這東東是漂浮購物車按鈕 -->
   <button class='button floatButton text-center text-white'
     id='floatButton' th:onclick="submitCart()">
@@ -294,10 +298,6 @@
           }
         });
     }
-
-    // document.getElementById('cart-quantity').addEventListener('click', function () {
-      
-    // });
   </script>
 </body>
 

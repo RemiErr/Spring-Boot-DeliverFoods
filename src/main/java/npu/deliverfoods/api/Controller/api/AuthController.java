@@ -13,7 +13,6 @@ import npu.deliverfoods.api.Model.User;
 import npu.deliverfoods.api.Service.Impl.DeliverService;
 import npu.deliverfoods.api.Service.Impl.UserService;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -80,14 +79,14 @@ public class AuthController {
   @PostMapping("/signup")
   public void signUp(HttpServletRequest request, HttpServletResponse response,
       @RequestBody User signUpUser) {
-        
+
     session = request.getSession();
 
     if (signUpUser.getName() == null ||
         signUpUser.getName() == "" ||
         signUpUser.getPassword() == null ||
         signUpUser.getPassword() == "") {
-      
+
       session.setAttribute("signUpErrorMessage", "帳號或密碼不能為空");
       return;
     }
@@ -109,25 +108,55 @@ public class AuthController {
     userService.save(signUpUser);
   }
 
-  @PostMapping("/remove")
+  @DeleteMapping("/remove")
   public void removeUser(HttpServletRequest request, HttpServletResponse response,
-        @RequestParam(name = "user", required = true) Long userId)
-        throws IOException {
-      
-      session = request.getSession();
-      User foundUser = userService.findById(userId);
-      User loggedInUser = (User) session.getAttribute("loggedInUser");
+      @RequestParam(name = "user", required = true) Long userId)
+      throws IOException {
 
-      if (loggedInUser == null) {
-        response.sendRedirect("/login");
-      } else if (foundUser == null) {
-        System.out.println("[Wrong] 查無該使用者 UserId=" + userId);
-      } else if (foundUser.getId() != loggedInUser.getId()) {
-        System.out.println("[Error] 無法刪除其他使用者！");
-      } else {
-        userService.deleteById(userId);
-        System.out.println("已成功刪除 UserId=" + userId);
-      }
+    session = request.getSession();
+    User foundUser = userService.findById(userId);
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+    if (loggedInUser == null) {
+      response.sendRedirect("/login");
+    } else if (foundUser == null) {
+      System.out.println("[Wrong] 查無該使用者 UserId=" + userId);
+    } else if (foundUser.getId() != loggedInUser.getId()) {
+      System.out.println("[Error] 無法刪除其他使用者！");
+    } else {
+      userService.deleteById(userId);
+      session = request.getSession();
+      session.invalidate();
+      System.out.println("已成功刪除 UserId=" + userId);
+    }
   }
-  
+
+  @PutMapping("/edit")
+  public void editUser(HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(name = "user", required = true) Long userId,
+      @RequestBody User editedUser)
+      throws IOException {
+
+    session = request.getSession();
+    User foundUser = userService.findById(userId);
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+    if (loggedInUser == null) {
+      response.sendRedirect("/login");
+    } else if (foundUser == null) {
+      System.out.println("[Wrong] 查無該使用者 UserId=" + userId);
+    } else if (foundUser.getId() != loggedInUser.getId()) {
+      System.out.println("[Error] 無法修改其他使用者資料！");
+    } else {
+      foundUser.setName(editedUser.getName());
+      foundUser.setEmail(editedUser.getEmail());
+      foundUser.setPhone(editedUser.getPhone());
+      foundUser.setAddress(editedUser.getAddress());
+      userService.update(foundUser);
+      session = request.getSession();
+      session.invalidate();
+      System.out.println("已成功修改 UserId=" + userId);
+    }
+  }
+
 }

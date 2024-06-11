@@ -34,7 +34,6 @@ public class UserService implements IService<User> {
 
   @Override
   public List<User> findAll() {
-    // return jdbcTemplate.query(sql, new UserRowMapper());
     String sql = "SELECT * FROM users";
     List<User> users = null;
 
@@ -78,7 +77,6 @@ public class UserService implements IService<User> {
     jdbcTemplate.update(sql, id);
   }
 
-  // 可能找到同名用戶，所以回傳使用 List
   public User findByUsername(String user_name) {
     String sql = "SELECT * FROM users WHERE user_name=?";
     User user = null;
