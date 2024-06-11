@@ -128,9 +128,6 @@ public class OrderController {
       @RequestBody Order order,
       @RequestParam(name = "deliverId") Long deliverId) {
 
-    // session = request.getSession();
-    // session.setAttribute("pickedDeliver", deliverService.findById(deliverId));
-
     // 更新資料
     order.setFkDeliverId(deliverId);
     order.setState(eS.外送中.get());

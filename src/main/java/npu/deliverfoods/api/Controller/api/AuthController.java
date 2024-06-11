@@ -147,10 +147,15 @@ public class AuthController {
     } else if (foundUser.getId() != loggedInUser.getId()) {
       System.out.println("[Error] 無法修改其他使用者資料！");
     } else {
-      foundUser.setName(editedUser.getName());
+      // foundUser.setName(editedUser.getName());
       foundUser.setEmail(editedUser.getEmail());
       foundUser.setPhone(editedUser.getPhone());
       foundUser.setAddress(editedUser.getAddress());
+      
+      if (editedUser.getPassword() != null && !editedUser.getPassword().isEmpty()) {
+        foundUser.setPassword(editedUser.getPassword());
+      }
+
       userService.update(foundUser);
       session = request.getSession();
       session.invalidate();

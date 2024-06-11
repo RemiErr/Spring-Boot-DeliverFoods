@@ -72,6 +72,10 @@ public class OrderService implements IService<Order> {
         String sql = "SELECT * FROM orders WHERE state='delivering' AND user_id=" + uid;
         return this.findAll(sql);
     }
+    public List<Order> findAllDeliveringOrderByDeliverId(Long did) {
+        String sql = "SELECT * FROM orders WHERE state='delivering' AND deliver_id=" + did;
+        return this.findAll(sql);
+    }
     
     // 所有已送達的訂單
     public List<Order> findAllArrivedOrder() {

@@ -125,6 +125,7 @@ public class IndexController {
     model.addAttribute("user", foundUser);
 
     model = getAllOrderDetail(model, orderService.findAllWaitingOrder());
+    model = getAllOrderDetail(model, orderService.findAllDeliveringOrderByDeliverId(foundDeliver.getId()));
 
     return "pick";
   }
@@ -143,9 +144,6 @@ public class IndexController {
     User foundUser = userService.findById(loggedInUser.getId());
     model.addAttribute("user", foundUser);
 
-    // 外送中清單
-    List<Order> foundAllDeliveringOrder = orderService.findAllDeliveringOrderByUserId(foundUser.getId());
-    model = getAllOrderDetail(model, foundAllDeliveringOrder);
     // 已送達清單
     List<Order> foundAllArrivedOrder = orderService.findAllArrivedOrderByUserId(foundUser.getId());
     model = getAllOrderDetail(model, foundAllArrivedOrder);
@@ -164,7 +162,11 @@ public class IndexController {
       return "redirect:/login";
     }
 
-    // 當前使用者所有等待中訂單
+    
+    // 外送中清單
+    List<Order> foundAllDeliveringOrder = orderService.findAllDeliveringOrderByUserId(loggedInUser.getId());
+    model = getAllOrderDetail(model, foundAllDeliveringOrder);
+    // 等待中訂單
     List<Order> foundAllWaitingOrder = orderService.findAllWaitingOrderByUserId(loggedInUser.getId());
     model = getAllOrderDetail(model, foundAllWaitingOrder);
 
@@ -186,35 +188,6 @@ public class IndexController {
     model.addAttribute("user", foundUser);
 
     return "info";
-  }
-
-  // 接單頁面
-  @GetMapping("/pick")
-  public String pickPage(HttpServletRequest request, Model model) {
-
-    session = request.getSession();
-    loggedInUser = (User) session.getAttribute("loggedInUser");
-
-    // 驗證使用者身分
-    Deliver founDeliver = null;
-    if (loggedInUser == null) {
-      return "redirect:/login";
-    } else {
-      try {
-        founDeliver = deliverService.findById(loggedInUser.getId());
-      } catch (Exception e) {
-        e.getStackTrace();
-      }
-      if (founDeliver == null) {
-        return "redirect:/";
-      }
-    }
-
-    // 系統中所有可接的訂單
-    List<Order> foundAllWaitingOrder = orderService.findAllWaitingOrder();
-    model = getAllOrderDetail(model, foundAllWaitingOrder);
-    
-    return "pick";
   }
 
   // 要顯示訂單狀態、內含品項，打包成 Model
@@ -261,6 +234,7 @@ public class IndexController {
       // 外層
       OrderDetail orderDetail = new OrderDetail();
       orderDetail.setOrderId(order.getId());
+      orderDetail.setUserId(foundUser.getId());
       orderDetail.setUserName(foundUser.getName());
       orderDetail.setAddress(foundUser.getAddress());
       if (foundDeliver != null) {
@@ -275,6 +249,18 @@ public class IndexController {
       data.put(order.getState(), orderDetailList);
     }
 
+    try {
+      // 合併舊資料
+      @SuppressWarnings("unchecked")
+      Map<String, List<OrderDetail>> preData = (Map<String, List<OrderDetail>>) model.getAttribute("data");
+
+      if (preData != null) {
+        data.putAll(preData);
+      }
+    } catch (Exception e) {
+      e.getStackTrace();
+    }
+    
     model.addAttribute("data", data);
     return model;
   }
@@ -282,11 +268,21 @@ public class IndexController {
   // 前台顯示的訂單結構
   class OrderDetail {
     Long orderId;
+    Long userId;
     String userName;
     String address;
     Map<String, List<ItemDeteil>> itemDeteilList;
     Long deliverId;
     String deliverName;
+
+
+    public Long getUserId() {
+      return userId;
+    }
+
+    public void setUserId(Long userId) {
+      this.userId = userId;
+    }
 
     public Long getOrderId() {
       return orderId;
@@ -332,10 +328,6 @@ public class IndexController {
 
     public void setDeliverId(Long deliverId) {
       this.deliverId = deliverId;
-    }
-
-    public void setDeliverId() {
-      this.deliverId = null;
     }
 
     public String getDeliverName() {

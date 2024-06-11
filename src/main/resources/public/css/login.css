@@ -1,0 +1,51 @@
+/* 讓整個畫面滿版 不然下面會有空格 */
+html,
+body {
+  height: 100%;
+}
+
+/* 把連結的底線跟顏色用掉 */
+a {
+  text-decoration: none
+}
+
+a:hover {
+  text-decoration: none
+}
+
+/* 背景顏色設定 */
+.back {
+  background-color: rgba(193, 216, 216, 0.966);
+  background-image: var(--bs-gradient);
+}
+
+/* 設定輸入框框大小 */
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}
+
+/* 讓點擊輸入框時外面的藍色框一定會在最上層 */
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+/* 縮短email那欄的下間隔 才能跟密碼欄貼在一起 順便把右下跟左下的圓角去掉 其實就美化細節而已 沒啥大影響 */
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* 這裡跟上面一樣 只是變成增加下間隔 才會跟登入按鈕有距離 然後去掉上面的兩個圓弧角 */
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.icon {
+  margin-bottom: 20px;
+  font-size: 100px;
+  color: rgb(9, 17, 76);
+}

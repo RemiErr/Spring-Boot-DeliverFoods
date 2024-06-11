@@ -8,108 +8,10 @@
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <meta charset="UTF-8">
-  <title>Pick List</title>
+  <title>接單系統</title>
 
-  <link rel="stylesheet" href="../static/js/func.js" th:href="@{/func.js}">
-
-  <style>
-    .block {
-      /*測試用方塊*/
-      margin: 10px auto;
-      width: 150px;
-      height: 150px;
-      border: 10px solid #9ddfd3;
-      background-color: #bce6eb;
-      color: #274046;
-    }
-
-    .button {
-      /*按鈕樣式*/
-      width: 90px;
-      height: 60px;
-      line-height: 60px;
-      background-color: rgb(51, 51, 51);
-      margin: 0 auto;
-      border-radius: 100px;
-    }
-
-    .floatButton {
-      /*漂浮按鈕 給右下角那個購物車用的*/
-      position: fixed;
-      bottom: 30px;
-      margin: 0 auto;
-      right: 1%;
-    }
-
-    body {
-      /*設定全體字型*/
-      font-family: 'Arial', sans-serif;
-    }
-
-    .sidebar {
-      /*側邊欄基礎設定*/
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 100;
-      /* Behind the navbar */
-      padding: 48px 0 0;
-      /* Height of navbar */
-      box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar-sticky {
-      /*側邊欄鎖定位置*/
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      height: calc(100vh - 48px);
-      padding-top: 0.5rem;
-      overflow-x: hidden;
-      overflow-y: auto;
-      /* Scrollable contents if viewport is shorter than content. */
-    }
-
-    .sidebar .nav-link {
-      /*側邊欄連結樣式 下面兩個也都是*/
-      font-weight: 500;
-      color: #333;
-    }
-
-    .sidebar .nav-link .feather {
-      margin-right: 4px;
-      color: #999;
-    }
-
-    .sidebar .nav-link.active {
-      color: #007bff;
-    }
-
-    .btn-demo {
-      /*加入購物車按鈕設定*/
-      position: relative;
-      width: 100px;
-      padding: 6px 12px;
-      text-align: left;
-    }
-
-    .btn-demo-label {
-      /*加入購物車按鈕設定*/
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: inline-block;
-      padding: 6px 12px;
-      background: rgba(0, 0, 0, 0.15);
-      border-radius: 0 3px 3px 0;
-    }
-
-    .border {
-      background-color: #99999983;
-      border-radius: 10px;
-    }
-  </style>
+  <link rel="shortcut icon" th:href="@{/img/DeliverFoods.png}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -133,7 +35,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                   <li class="nav-item" th:if="${session.isDeliver}">
                     <!-- 這裡的東西也可以改成連結到其他地方的按鈕 但目前其實就只是顯示現在在哪個頁面的title而已 -->
-                    <a class="nav-link active" aria-current="page" href="/pickup">接單系統</a>
+                    <a class="nav-link active fw-bold text-warning" aria-current="page" href="/pickup">接單系統</a>
                   </li>
                 </ul>
               </div>
@@ -194,20 +96,26 @@
 
         <!-- 訂單資訊 -->
         <div class="container mt-5">
-          <div th:if="${data != null && data.get('waiting') != null}">
+          <div th:if="${data != null && data?.get('waiting') != null}">
             <h1 class="mb-4">等待中的訂單：</h1>
             <table class="table table-bordered table-hover">
               <thead class="thead-light">
                 <tr>
-                  <th scope="col-1">單號</th>
-                  <th scope="col">使用者</th>
+                  <th scope="col-1">操作</th>
+                  <th scope="col">消費者</th>
                   <th scope="col">送餐地址</th>
                   <th scope="col-6">品項</th>
                 </tr>
               </thead>
               <tbody>
                 <tr th:each="order : ${data.get('waiting')}">
-                  <td th:text="${order.orderId}"></td>
+                  <td>
+                    <button class="btn btn-secondary btn-demo" th:data-order-id="${order.orderId}"
+                      th:data-user-id="${order.userId}" th:onclick="'doPick(' + this + ', ' + ${session.deliverId} + ')'">
+                      <i class="fa-solid fa-check"></i>
+                      <span class="px-md-2">接單</span>
+                    </button>
+                  </td>
                   <td th:text="${order.userName}"></td>
                   <td th:text="${order.address}"></td>
                   <td>
@@ -227,7 +135,46 @@
             </table>
           </div>
 
-          <div th:if="${data?.get('waiting') == null}">
+          <div th:if="${data != null && data?.get('delivering') != null}">
+            <h1 class="mb-4">配送中的訂單：</h1>
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col-1">操作</th>
+                  <th scope="col">消費者</th>
+                  <th scope="col">送餐地址</th>
+                  <th scope="col-6">品項</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="order : ${data.get('delivering')}">
+                  <td>
+                    <button class="btn btn-secondary btn-demo"
+                      th:onclick="'finishPick(' + ${order.orderId} + ')'">
+                      <i class="fa-solid fa-check-double"></i>
+                      <span class="px-md-2">完成</span>
+                    </button>
+                  </td>
+                  <td th:text="${order.userName}"></td>
+                  <td th:text="${order.address}"></td>
+                  <td>
+                    <div class="row">
+                      <div class="col-6" th:each="item : ${order.itemDeteilList}">
+                        <div class="border p-2">
+                          <div th:text="${item.foodName}"></div>
+                          <div th:text="${item.foodType}"></div>
+                          <div th:text="'$' + ${item.price} + ' NTD，' + ${item.quantity} + ' 份'"></div>
+                          <div th:text="'共 $' + ${item.price * item.quantity} + ' NTD'"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div th:if="${data?.get('waiting') == null && data?.get('delivering') == null}">
             <div class="card text-dark bg-danger mb-3">
               <div class="card-header text-center">
                 <i class="fa-solid fa-motorcycle"></i>
@@ -245,6 +192,51 @@
   </div>
 
   <script>
+    function doPick(button, deliverId) {
+      const url = '/api/order/pickup?deliverId=' + deliverId;
+      const orderId = button.getAttribute('data-order-id');
+      const userId = button.getAttribute('data-user-id');
+
+      const data = {
+        orderId: orderId,
+        state: "waiting",
+        userId: userId
+      };
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          alert(`已接取訂單 ID: ${orderId} 開始配送餐點。`);
+          location.href='/pickup';
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+
+    function finishPick(orderId) {
+      const url = '/api/order/complate?orderId=' + orderId;
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response =>  {
+          alert(`訂單 ID: ${orderId} 配送完成。`);
+          location.href='/pickup';
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+
     function logOut() {
       fetch('/api/auth/logout', {
         method: 'POST',

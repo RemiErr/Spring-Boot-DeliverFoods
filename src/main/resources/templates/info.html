@@ -11,101 +11,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>帳號資訊</title>
 
-  <link rel="stylesheet" th:href="@{../static/js/func.js}">
-
-  <style>
-    .block {
-      /*測試用方塊*/
-      margin: 10px auto;
-      width: 150px;
-      height: 150px;
-      border: 10px solid #9ddfd3;
-      background-color: #bce6eb;
-      color: #274046;
-    }
-
-    .button {
-      /*按鈕樣式*/
-      width: 90px;
-      height: 60px;
-      line-height: 60px;
-      background-color: rgb(51, 51, 51);
-      margin: 0 auto;
-      border-radius: 100px;
-    }
-
-    .floatButton {
-      /*漂浮按鈕 給右下角那個購物車用的*/
-      position: fixed;
-      bottom: 30px;
-      margin: 0 auto;
-      right: 1%;
-    }
-
-    body {
-      /*設定全體字型*/
-      font-family: 'Arial', sans-serif;
-    }
-
-    .sidebar {
-      /*側邊欄基礎設定*/
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 100;
-      /* Behind the navbar */
-      padding: 48px 0 0;
-      /* Height of navbar */
-      box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar-sticky {
-      /*側邊欄鎖定位置*/
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      height: calc(100vh - 48px);
-      padding-top: 0.5rem;
-      overflow-x: hidden;
-      overflow-y: auto;
-      /* Scrollable contents if viewport is shorter than content. */
-    }
-
-    .sidebar .nav-link {
-      /*側邊欄連結樣式 下面兩個也都是*/
-      font-weight: 500;
-      color: #333;
-    }
-
-    .sidebar .nav-link .feather {
-      margin-right: 4px;
-      color: #999;
-    }
-
-    .sidebar .nav-link.active {
-      color: #007bff;
-    }
-
-    .btn-demo {
-      /*加入購物車按鈕設定*/
-      position: relative;
-      width: 100px;
-      padding: 6px 12px;
-      text-align: left;
-    }
-
-    .btn-demo-label {
-      /*加入購物車按鈕設定*/
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: inline-block;
-      padding: 6px 12px;
-      background: rgba(0, 0, 0, 0.15);
-      border-radius: 0 3px 3px 0;
-    }
-  </style>
+  <link rel="shortcut icon" th:href="@{/img/DeliverFoods.png}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -192,8 +99,12 @@
           <form id="updateForm">
             <input type="hidden" class="form-control" id="userId" th:value="${user.id}" required>
             <div class="mb-3">
-              <label for="name" class="form-label">使用者名稱</label>
-              <input type="text" class="form-control" id="name" th:value="${user.name}" required>
+              <label for="name" class="form-label">使用者名稱 (不可變更)</label>
+              <input type="text" disabled="disabled" class="form-control" id="name" th:value="${user.name}" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">密碼</label>
+              <input type="password" class="form-control" id="password" value="" placeholder="若想修改密碼，請輸入新密碼">
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">電子郵件</label>
@@ -224,30 +135,34 @@
       event.preventDefault();
 
       const userId = document.getElementById('userId').value;
-      const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const phone = document.getElementById('phone').value;
       const address = document.getElementById('address').value;
+      const password = document.getElementById('password').value;
 
-      const postData = { name, email, phone, address };
+      const postData = { email, phone, address, password };
 
-      fetch('/api/auth/edit?user=' + userId, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            alert('資料更新成功，請重新登入');
-            location.href="/";
-          }
+      if (password === '' || (password != '' && confirm('您確定要修改密碼嗎？'))) {
+        fetch('/api/auth/edit?user=' + userId, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
         })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('資料更新失敗');
-        });
+          .then(response => {
+            if (response.status === 200) {
+              alert('資料更新成功，請重新登入');
+              location.href="/";
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('資料更新失敗');
+          });
+      } else {
+        document.getElementById('password').value = '';
+      }
     });
 
     function deleteAccount() {

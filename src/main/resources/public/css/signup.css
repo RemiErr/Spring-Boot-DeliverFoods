@@ -1,0 +1,54 @@
+/* 跟登入大同小異 */
+html,
+body {
+  height: 100%;
+}
+
+a {
+  text-decoration: none
+}
+
+a:hover {
+  text-decoration: none
+}
+
+.back {
+  background-color: rgba(193, 216, 216, 0.966);
+  background-image: var(--bs-gradient);
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+/* 只是這邊把Email外觀控制分成上中下三個部分 分別呈現不同效果 */
+.Toppadding {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.Middelpadding {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.Bottompadding {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.icon {
+  margin-bottom: 20px;
+  font-size: 100px;
+  color: rgb(9, 17, 76);
+}
