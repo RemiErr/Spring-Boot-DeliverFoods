@@ -48,16 +48,15 @@ public class AuthController {
       session.setAttribute("loggedInUser", foundUser);
       session.setAttribute("loginMessage", user.getName() + " 登入成功");
       session.setAttribute("deliverId", null);
-
+      
       boolean isDeliver = foundDeliver != null;
+      session.setAttribute("isDeliver", isDeliver);
       if (isDeliver) {
-
+        
         @SuppressWarnings("null")
         Long deliverId = foundDeliver.getId();
-
+        
         session.setAttribute("deliverId", deliverId);
-        response.sendRedirect("/?deliver=" + deliverId);
-
       }
 
       response.sendRedirect("/");

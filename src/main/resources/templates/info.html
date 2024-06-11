@@ -109,7 +109,6 @@
 </head>
 
 <body>
-
   <!-- 下面這個div把整個header包起來 -->
   <div class="container">
     <!-- 下面這個div把header劃分成一個row -->
@@ -120,7 +119,7 @@
           <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-secondary">
             <!-- 下面這個div把header的東西都變水平的 -->
             <div class="container-fluid">
-              <a class="navbar-brand" href="#">訂餐</a>
+              <a class="navbar-brand" href="/">訂餐</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -128,9 +127,9 @@
               <!-- 下面這個div把header上的Home單獨切出來 如果之後有要加其他東西也可以直接從這邊加li就可以了 -->
               <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                  <li class="nav-item" th:if="${deliver != null}">
+                  <li class="nav-item" th:if="${session.isDeliver}">
                     <!-- 這裡的東西也可以改成連結到其他地方的按鈕 但目前其實就只是顯示現在在哪個頁面的title而已 -->
-                    <a class="nav-link active" aria-current="page" href="#">接單系統</a>
+                    <a class="nav-link" aria-current="page" href="/pickup">接單系統</a>
                   </li>
                 </ul>
               </div>
@@ -145,7 +144,7 @@
     <div class="sidebar-sticky">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#">
+          <a class="nav-link" href="/">
             <span data-feather="home"></span>
             首頁
           </a>
@@ -163,7 +162,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/info">
+          <a class="nav-link active" href="/info">
             <span data-feather="bar-chart-2"></span>
             帳號資訊
           </a>

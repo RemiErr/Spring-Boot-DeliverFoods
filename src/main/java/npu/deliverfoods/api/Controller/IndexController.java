@@ -188,6 +188,35 @@ public class IndexController {
     return "info";
   }
 
+  // 接單頁面
+  @GetMapping("/pick")
+  public String pickPage(HttpServletRequest request, Model model) {
+
+    session = request.getSession();
+    loggedInUser = (User) session.getAttribute("loggedInUser");
+
+    // 驗證使用者身分
+    Deliver founDeliver = null;
+    if (loggedInUser == null) {
+      return "redirect:/login";
+    } else {
+      try {
+        founDeliver = deliverService.findById(loggedInUser.getId());
+      } catch (Exception e) {
+        e.getStackTrace();
+      }
+      if (founDeliver == null) {
+        return "redirect:/";
+      }
+    }
+
+    // 系統中所有可接的訂單
+    List<Order> foundAllWaitingOrder = orderService.findAllWaitingOrder();
+    model = getAllOrderDetail(model, foundAllWaitingOrder);
+    
+    return "pick";
+  }
+
   // 要顯示訂單狀態、內含品項，打包成 Model
   public Model getAllOrderDetail(Model model, List<Order> allOrder) {
     // 防止空陣列
