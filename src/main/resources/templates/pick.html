@@ -106,7 +106,7 @@
                 </tr>
               </thead>
               <tbody class="table-secondary align-middle">
-                <tr th:each="order : ${data.get('waiting')}">
+                <tr th:each="order : ${data?.get('waiting')}">
                   <td>
                     <button class="btn btn-secondary btn-demo" th:data-order-id="${order.orderId}"
                       th:data-user-id="${order.userId}" th:onclick="'doPick(' + this + ', ' + ${session.deliverId} + ')'">
@@ -147,7 +147,7 @@
                 </tr>
               </thead>
               <tbody class="table-secondary align-middle">
-                <tr th:each="order : ${data.get('delivering')}">
+                <tr th:each="order : ${data?.get('delivering')}">
                   <td>
                     <button class="btn btn-secondary btn-demo"
                       th:onclick="'finishPick(' + ${order.orderId} + ')'">
