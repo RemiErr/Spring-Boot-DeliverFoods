@@ -95,11 +95,11 @@
       </div>
       <!-- 下面這個div就是把剩下的column都切給那個列表 -->
       <div class="col d-flex">
-        <table class="table">
-          <thead>
+        <table class="table table-secondary table-bordered table-hover table-striped text-center align-middle">
+          <thead class="table-dark border-dark">
             <tr>
               <th class="col-2">餐點名稱</th>
-              <th class="col-2">類型</th>
+              <th class="col-1">類型</th>
               <th class="col-2">庫存</th>
               <th class="col-2">價格</th>
               <th class="col-2">份量</th>
@@ -109,8 +109,10 @@
           <tbody>
 
             <tr th:each="food : ${foods}">
-              <th scope="row" th:text="${food.name}"></th>
-              <td th:text="${food.foodType}"></td>
+              <th class="fw-bold" scope="row" th:text="${food.name}"></th>
+              <td class="text-secondary" th:if="${food.foodType == 'drinks'}"><i class="fa-solid fa-mug-hot"></i></td>
+              <td class="text-secondary" th:if="${food.foodType == 'staple'}"><i class="fa-solid fa-bowl-rice"></i></td>
+              <td class="text-secondary" th:if="${food.foodType == 'side'}"><i class="fa-solid fa-carrot"></i></td>
               <td th:text="${food.stock}"></td>
               <td th:text="${food.price}"></td>
               <td>
@@ -135,9 +137,10 @@
   </div>
 
   <!-- 這東東是漂浮購物車按鈕 -->
-  <button class='button floatButton text-center text-white' id='floatButton' th:onclick="submitCart()">
+  <button class='floatButton btn bg-dark align-middle text-center text-white'
+    style="width: 80px; height: 80px; border-radius: 80px;" id='floatButton' th:onclick="submitCart()">
+    <span class="badge bg-opacity-100 fw-bold fs-5" id="cart-quantity">0</span>
     <i class="fa-solid fa-cart-shopping"></i>
-    <span class="badge bg-secondary" id="cart-quantity">0</span>
   </button>
 
 
@@ -170,6 +173,10 @@
     }
 
     function submitCart() {
+      if (cart.length === 0) {
+        return;
+      }
+
       const postData = { foods: cart };
 
       fetch('/api/order/addition', {
@@ -182,7 +189,7 @@
         .then(response => {
           if (response.status === 200) {
             alert('訂單已提交成功');
-            location.href="/cart";
+            location.href = "/cart";
           } else {
             console.log('Response status:', response.status);
           }

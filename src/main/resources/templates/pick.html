@@ -88,18 +88,16 @@
     <!-- 定義row -->
     <div class="row gx-3 ">
       <!-- 下面這個div是為了跟側邊欄有距離 所以把第一個column空著 不然會貼在一起 -->
-      <div class="col-1">
-
-      </div>
+      <div class="col-1"></div>
       <!-- 下面這個div就是把剩下的column都切給那個列表 -->
       <div class="col d-flex">
 
         <!-- 訂單資訊 -->
         <div class="container mt-5">
-          <div th:if="${data != null && data?.get('waiting') != null}">
-            <h1 class="mb-4">等待中的訂單：</h1>
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
+          <div th:if="${data?.get('waiting') != null}">
+            <h1 class="mb-4">可接取的訂單：</h1>
+            <table class="table table-bordered table-hover text-center">
+              <thead class="table-dark">
                 <tr>
                   <th scope="col-1">操作</th>
                   <th scope="col">消費者</th>
@@ -107,7 +105,7 @@
                   <th scope="col-6">品項</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="table-secondary align-middle">
                 <tr th:each="order : ${data.get('waiting')}">
                   <td>
                     <button class="btn btn-secondary btn-demo" th:data-order-id="${order.orderId}"
@@ -121,9 +119,11 @@
                   <td>
                     <div class="row">
                       <div class="col-6" th:each="item : ${order.itemDeteilList}">
-                        <div class="border p-2">
-                          <div th:text="${item.foodName}"></div>
-                          <div th:text="${item.foodType}"></div>
+                        <div class="border border-dark rounded p-2">
+                          <div class="fs-5 fw-bold" th:text="${item.foodName}"></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'drinks'}"><i class="fa-solid fa-mug-hot"></i></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'staple'}"><i class="fa-solid fa-bowl-rice"></i></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'side'}"><i class="fa-solid fa-carrot"></i></div>
                           <div th:text="'$' + ${item.price} + ' NTD，' + ${item.quantity} + ' 份'"></div>
                           <div th:text="'共 $' + ${item.price * item.quantity} + ' NTD'"></div>
                         </div>
@@ -135,10 +135,10 @@
             </table>
           </div>
 
-          <div th:if="${data != null && data?.get('delivering') != null}">
+          <div th:if="${data?.get('delivering') != null}">
             <h1 class="mb-4">配送中的訂單：</h1>
-            <table class="table table-bordered table-hover">
-              <thead class="thead-light">
+            <table class="table table-bordered table-hover text-center">
+              <thead class="table-dark">
                 <tr>
                   <th scope="col-1">操作</th>
                   <th scope="col">消費者</th>
@@ -146,7 +146,7 @@
                   <th scope="col-6">品項</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="table-secondary align-middle">
                 <tr th:each="order : ${data.get('delivering')}">
                   <td>
                     <button class="btn btn-secondary btn-demo"
@@ -160,9 +160,11 @@
                   <td>
                     <div class="row">
                       <div class="col-6" th:each="item : ${order.itemDeteilList}">
-                        <div class="border p-2">
-                          <div th:text="${item.foodName}"></div>
-                          <div th:text="${item.foodType}"></div>
+                        <div class="border border-dark rounded p-2">
+                          <div class="fs-5 fw-bold" th:text="${item.foodName}"></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'drinks'}"><i class="fa-solid fa-mug-hot"></i></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'staple'}"><i class="fa-solid fa-bowl-rice"></i></div>
+                          <div class="text-secondary" th:if="${item.foodType == 'side'}"><i class="fa-solid fa-carrot"></i></div>
                           <div th:text="'$' + ${item.price} + ' NTD，' + ${item.quantity} + ' 份'"></div>
                           <div th:text="'共 $' + ${item.price * item.quantity} + ' NTD'"></div>
                         </div>

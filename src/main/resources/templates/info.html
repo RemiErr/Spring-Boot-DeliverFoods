@@ -89,9 +89,7 @@
     <!-- 定義row -->
     <div class="row gx-3 ">
       <!-- 下面這個div是為了跟側邊欄有距離 所以把第一個column空著 不然會貼在一起 -->
-      <div class="col-1">
-
-      </div>
+      <div class="col-1"></div>
       <!-- 下面這個div就是把剩下的column都切給那個列表 -->
       <div class="col d-flex">
         <div class="container mt-5">
@@ -99,7 +97,7 @@
           <form id="updateForm">
             <input type="hidden" class="form-control" id="userId" th:value="${user.id}" required>
             <div class="mb-3">
-              <label for="name" class="form-label">使用者名稱 (不可變更)</label>
+              <label for="name" class="form-label">使用者名稱 <span class="text-danger">(不可變更)</span></label>
               <input type="text" disabled="disabled" class="form-control" id="name" th:value="${user.name}" required>
             </div>
             <div class="mb-3">
@@ -118,10 +116,10 @@
               <label for="address" class="form-label">地址</label>
               <input type="text" class="form-control" id="address" th:value="${user.address}" required>
             </div>
-            <div class="d-grid gap-2 col-8 mx-auto">
-              <button type="submit" class="btn btn-primary cne">更新資料</button>
+            <div class="d-grid gap-2 col-4 mx-auto">
+              <button type="submit" class="btn btn-success cne">更新資料</button>
               <hr class="col-10" style="margin-left: auto; margin-right: auto;">
-              <button type="button" class="btn btn-danger" onclick="deleteAccount()">刪除帳號</button>
+              <button type="button" class="btn btn-outline-danger fw-bold" onclick="deleteAccount()">刪除帳號</button>
             </div>
           </form>
         </div>
