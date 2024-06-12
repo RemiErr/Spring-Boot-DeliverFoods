@@ -110,9 +110,9 @@
 
             <tr th:each="food : ${foods}">
               <th class="fw-bold" scope="row" th:text="${food.name}"></th>
-              <td class="text-secondary" th:if="${food.foodType == 'drinks'}"><i class="fa-solid fa-mug-hot"></i></td>
-              <td class="text-secondary" th:if="${food.foodType == 'staple'}"><i class="fa-solid fa-bowl-rice"></i></td>
-              <td class="text-secondary" th:if="${food.foodType == 'side'}"><i class="fa-solid fa-carrot"></i></td>
+              <td class="text-secondary fs-3" th:if="${food.foodType == 'drinks'}"><i class="fa-solid fa-mug-hot"></i></td>
+              <td class="text-secondary fs-3" th:if="${food.foodType == 'staple'}"><i class="fa-solid fa-bowl-rice"></i></td>
+              <td class="text-secondary fs-3" th:if="${food.foodType == 'side'}"><i class="fa-solid fa-carrot"></i></td>
               <td th:text="${food.stock}"></td>
               <td th:text="${food.price}"></td>
               <td>

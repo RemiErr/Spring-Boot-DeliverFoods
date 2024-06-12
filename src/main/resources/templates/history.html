@@ -93,7 +93,7 @@
       <div class="col d-flex">
         <!-- 訂單資訊 -->
         <div class="container mt-5">
-          <div th:if="${data.get('arrived') != null}">
+          <div th:if="${data?.get('arrived') != null}">
             <h1 class="mb-4">已送達的訂單：</h1>
             <table class="table table-bordered table-hover text-center">
               <thead class="table-dark">
@@ -106,7 +106,7 @@
                 </tr>
               </thead>
               <tbody class="table-secondary align-middle">
-                <tr th:each="order : ${data.get('arrived')}">
+                <tr th:each="order : ${data?.get('arrived')}">
                   <td th:text="${order.orderId}"></td>
                   <td th:text="${order.userName}"></td>
                   <td th:text="${order.deliverName}"></td>
